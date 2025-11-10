@@ -72,3 +72,5 @@ as_kable_extra(tbl,
 
 ```
 
+## Introduction
+The purpose of this project is to examine the effects of botulism toxin type B (BotB) to treat cervical dystonia over time. The data comes from a multicenter randomized clinical trial for cervical dystonia patients with 9 U.S. sites. The treatment groups included in the study were placebo, 5000U BotB, and 10000U BotB. The response variable is Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS). The TWSTRS score was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after treatment start.

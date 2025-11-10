@@ -1,0 +1,121 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={BIOS 667 Group Project},
+  pdfauthor={Lily Bai; Nathalie Blasco; Yihao Peng; Lauren Rackley; Sirui Wu},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{BIOS 667 Group Project}
+\author{Lily Bai \and Nathalie Blasco \and Yihao Peng \and Lauren
+Rackley \and Sirui Wu}
+\date{2025-11-10}
+
+\begin{document}
+\maketitle
+
+\begin{longtable}[t]{lcccc}
+\caption{\label{tab:unnamed-chunk-1}Patient Characteristics at Baseline}\\
+\toprule
+\textbf{Characteristic} & \makecell[c]{\textbf{Placebo}\ \ \\N = 36} & \makecell[c]{\textbf{5000U}\ \ \\N = 36} & \makecell[c]{\textbf{10000U}\ \ \\N = 37} & \textbf{p-value}\\
+\midrule
+Sex &  &  &  & 0.071\\
+\hspace{1em}Female & 21 (58\%) & 18 (50\%) & 28 (76\%) & \\
+\hspace{1em}Male & 15 (42\%) & 18 (50\%) & 9 (24\%) & \\
+Age (years) &  &  &  & 0.6\\
+\hspace{1em}No. obs. & 36 & 36 & 37 & \\
+\hspace{1em}Mean (SD) & 54 (12) & 57 (12) & 56 (12) & \\
+\hspace{1em}Median & 56 & 57 & 54 & \\
+\hspace{1em}Min,Max & 26,79 & 35,83 & 34,76 & \\
+TWSTRS total score at baseline &  &  &  & 0.3\\
+\hspace{1em}Mean (SD) & 44 (9) & 46 (10) & 47 (10) & \\
+\bottomrule
+\multicolumn{5}{l}{\rule{0pt}{1em}\textsuperscript{1} n (\%)}\\
+\multicolumn{5}{l}{\rule{0pt}{1em}\textsuperscript{2} TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale}\\
+\multicolumn{5}{l}{\rule{0pt}{1em}\textsuperscript{3} Pearson's Chi-squared test; Kruskal-Wallis rank sum test}\\
+\end{longtable}
+
+\subsection{Introduction}\label{introduction}
+
+The purpose of this project is to examine the effects of botulism toxin
+type B (BotB) to treat cervical dystonia over time. The data comes from
+a multicenter randomized clinical trial for cervical dystonia patients
+with 9 U.S. sites. The treatment groups included in the study were
+placebo, 5000U BotB, and 10000U BotB. The response variable is Toronto
+Western Spasmodic Torticollis Rating Scale (TWSTRS). The TWSTRS score
+was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after
+treatment start.
+
+\end{document}
