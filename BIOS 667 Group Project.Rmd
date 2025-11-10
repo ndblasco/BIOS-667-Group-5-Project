@@ -1,0 +1,51 @@
+---
+title: "BIOS 667 Group Project"
+author: "Group Project"
+date: "`r Sys.Date()`"
+format: html
+---
+
+```{r}
+# Load packages
+library(haven) # for reading in data 
+library(dplyr) # for manipulating data
+library(gtsummary) # for making table 1
+library(cards)
+
+# Read the SPSS file
+cdystonia <- read_dta("/Users/laurenrackley/Downloads/cdystonia.dta")
+
+# Inspect data
+#head(cdystonia)
+
+cdystonia <- cdystonia %>% mutate(
+    trt = case_when(
+      treat == 1 ~ "10000U",
+      treat == 2 ~ "5000U",
+      treat == 3 ~ "Placebo"
+    ),
+    sexc = case_when(
+      sex == 1 ~ "Female",
+      sex == 2 ~ "Male"))
+
+# Filter to only week 0
+cdystonia_wk0 <- cdystonia %>%
+  filter(week == 0)
+
+cdystonia_wk0 |>
+  tbl_summary(by = trt, 
+              include = c(sexc, age,twstrs),
+              type=all_continuous()~"continuous2",
+              label = list(sexc = "Sex",age~"Age (years)",twstrs="TWSTRS total score at baseline"),
+              statistic = list(
+      age ~ c(
+      "{N_obs}",
+      "{mean} ({sd})",
+      "{median}",
+      "{min},{max}"),
+      all_categorical() ~ "{n} ({p}%)",
+      twstrs~"{mean} ({sd})")) |>
+  add_p()
+
+```
+
