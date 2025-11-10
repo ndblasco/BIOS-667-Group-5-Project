@@ -8,4 +8,13 @@ This dataset in from Table 6.9 of Statistical Methods for the Analysis of Repeat
 
 **To read dta file into R:**  
 library(haven)  
-df <- read_dta("cdystonia.dta")
+df <- read_dta("cdystonia.dta")  
+
+**Workload Split:**  
+* Intro/Methods: Lauren  
+* Modeling and corresponding Results section:  
+  * GLM: Nathalie  
+  * GEE:  
+  * GLMM:  
+* Discussion/Conclusion:  
+
