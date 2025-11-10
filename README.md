@@ -5,6 +5,8 @@ This dataset in from Table 6.9 of Statistical Methods for the Analysis of Repeat
 * Randomized to placebo (N=36), 5000 units of BotB (N=36), 10,000 units of BotB (N=37)
 * Response variable: total score on Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS), measuring severity, pain, and disability of cervical dystonia (high scores mean more impairment)
 * TWSTRS measured at baseline (week 0) and weeks 2, 4, 8, 12, 16 after treatment began
+* treat = 1,2,3 is 10000 IU, 5000 IU, Placebo respectively
+* sex=1 is female, sex=2 is male
 
 **To read dta file into R:**  
 library(haven)  
