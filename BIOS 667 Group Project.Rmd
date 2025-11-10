@@ -1,16 +1,28 @@
 ---
 title: "BIOS 667 Group Project"
-author: "Group Project"
+author: 
+- Lily Bai
+- Nathalie Blasco
+- Yihao Peng
+- Lauren Rackley
+- Sirui Wu
 date: "`r Sys.Date()`"
-format: html
+output:
+  pdf_document:
+    latex_engine: xelatex
+    keep_tex: true
 ---
 
-```{r}
+```{r,echo=FALSE}
 # Load packages
+suppressPackageStartupMessages({
 library(haven) # for reading in data 
 library(dplyr) # for manipulating data
 library(gtsummary) # for making table 1
 library(cards)
+library(kableExtra)
+library(huxtable) # for styling tables
+})
 
 # Read the SPSS file
 cdystonia <- read_dta("/Users/laurenrackley/Downloads/cdystonia.dta")
@@ -33,7 +45,7 @@ cdystonia <- cdystonia %>% mutate(
 cdystonia_wk0 <- cdystonia %>%
   filter(week == 0)
 
-cdystonia_wk0 |>
+tbl <- cdystonia_wk0 |>
   tbl_summary(by = trt, 
               include = c(sexc, age,twstrs),
               type=all_continuous()~"continuous2",
@@ -46,7 +58,17 @@ cdystonia_wk0 |>
       "{min},{max}"),
       all_categorical() ~ "{n} ({p}%)",
       twstrs~"{mean} ({sd})")) |>
-  add_p()
+  add_p() |>
+  modify_footnote(
+    all_stat_cols() ~ "TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale",
+    abbreviation = TRUE
+  )
+
+as_kable_extra(tbl,
+               booktabs=TRUE,
+               longtable=TRUE,
+               linesep="",
+               caption = "Patient Characteristics at Baseline")
 
 ```
 
