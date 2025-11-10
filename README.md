@@ -17,6 +17,6 @@ df <- read_dta("cdystonia.dta")
 * Modeling and corresponding Results section:  
   * GLM: Nathalie  
   * GEE: Lily
-  * GLMM:  
-* Discussion/Conclusion:  
+  * GLMM:Sirui
+* Discussion/Conclusion:Yihao
 
