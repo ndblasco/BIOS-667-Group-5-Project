@@ -1,6 +1,8 @@
 # This is the repository for Group 5's Final Project for BIOS 667. 
 
 ### RQ: Does treatment have a significant effect on TWSTRS score over time, adjusting for age and sex?  
+**View presentation here**: https://docs.google.com/presentation/d/11_oSlonuN7ksRJ1M47nv2QdUVYs8kBZUXGYvkx2c1Ao/edit?usp=sharing  
+
 Data obtained from http://hbiostat.org/data courtesy of the Vanderbilt University Department of Biostatistics  
 
 This dataset in from Table 6.9 of Statistical Methods for the Analysis of Repeated Measurements by Charles S. Davis, pp. 161-163 (Springer, 2002). These data are from a multicenter, randomized controlled trial of botulinum toxin type B (BotB) in patients with cervical dystonia from nine U.S. sites.  
