@@ -24,11 +24,11 @@ library(kableExtra)
 library(huxtable) # for styling tables
 })
 
-# Read the SPSS file
+# Read in data
 cdystonia <- read_dta("/Users/laurenrackley/Downloads/cdystonia.dta")
 
 # Inspect data
-#head(cdystonia)
+head(cdystonia)
 
 cdystonia <- cdystonia %>% mutate(
     trt = case_when(
@@ -55,14 +55,16 @@ tbl <- cdystonia_wk0 |>
       "{N_obs}",
       "{mean} ({sd})",
       "{median}",
-      "{min},{max}"),
+      "{min}, {max}"),
       all_categorical() ~ "{n} ({p}%)",
       twstrs~"{mean} ({sd})")) |>
-  add_p() |>
+  add_p(pvalue_fun = ~style_sigfig(., digits = 4)) |>
   modify_footnote(
-    all_stat_cols() ~ "TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale",
+    all_stat_cols() ~ 
+      "BotB = botulinum toxin type B;TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale.",
     abbreviation = TRUE
-  )
+  ) |>
+  modify_spanning_header(all_stat_cols() ~ "**BotB**")
 
 as_kable_extra(tbl,
                booktabs=TRUE,
@@ -74,3 +76,8 @@ as_kable_extra(tbl,
 
 ## Introduction
 The purpose of this project is to examine the effects of botulism toxin type B (BotB) to treat cervical dystonia over time. The data comes from a multicenter randomized clinical trial for cervical dystonia patients with 9 U.S. sites. The treatment groups included in the study were placebo, 5000U BotB, and 10000U BotB. The response variable is Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS). The TWSTRS score was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after treatment start.
+
+## Methods
+
+
+## References
