@@ -24,6 +24,7 @@ cdystonia <- cdystonia %>% mutate(
       treat == 2 ~ "5000U",
       treat == 3 ~ "Placebo"
     ),
+    trt = factor(trt, levels = c("Placebo", "5000U", "10000U")),
     sexc = case_when(
       sex == 1 ~ "Female",
       sex == 2 ~ "Male"))
