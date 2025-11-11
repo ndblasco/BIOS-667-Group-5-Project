@@ -25,7 +25,7 @@ library(huxtable) # for styling tables
 })
 
 # Read in data
-cdystonia <- read_dta("/Users/laurenrackley/Downloads/cdystonia.dta")
+cdystonia <- read_dta("Data/cdystonia.dta") # mapping to Data folder in GitHub repo
 
 # Inspect data
 head(cdystonia)
@@ -58,13 +58,16 @@ tbl <- cdystonia_wk0 |>
       "{min}, {max}"),
       all_categorical() ~ "{n} ({p}%)",
       twstrs~"{mean} ({sd})")) |>
+  add_overall() |>
   add_p(pvalue_fun = ~style_sigfig(., digits = 4)) |>
   modify_footnote(
     all_stat_cols() ~ 
       "BotB = botulinum toxin type B;TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale.",
     abbreviation = TRUE
   ) |>
-  modify_spanning_header(all_stat_cols() ~ "**BotB**")
+  modify_spanning_header(c(stat_2,stat_3)~"**BotB**")
+
+#show_header_names(tbl)
 
 as_kable_extra(tbl,
                booktabs=TRUE,
