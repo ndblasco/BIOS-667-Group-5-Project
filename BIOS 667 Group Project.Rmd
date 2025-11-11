@@ -22,6 +22,8 @@ library(gtsummary) # for making table 1
 library(cards)
 library(kableExtra)
 library(huxtable) # for styling tables
+library(tidyr) # for reshaping data
+library(gtreg) # for making tables
 })
 
 # Read in data
@@ -30,14 +32,14 @@ cdystonia <- read_dta("Data/cdystonia.dta") # mapping to Data folder in GitHub r
 # Inspect data
 head(cdystonia)
 
-cdystonia <- cdystonia %>% mutate(
-    trt = case_when(
+cdystonia <- cdystonia %>% dplyr::mutate(
+    trt = dplyr::case_when(
       treat == 1 ~ "10000U",
       treat == 2 ~ "5000U",
       treat == 3 ~ "Placebo"
     ),
     trt = factor(trt, levels = c("Placebo", "5000U", "10000U")),
-    sexc = case_when(
+    sexc = dplyr::case_when(
       sex == 1 ~ "Female",
       sex == 2 ~ "Male"))
 
@@ -74,6 +76,45 @@ as_kable_extra(tbl,
                longtable=TRUE,
                linesep="",
                caption = "Patient Characteristics at Baseline")
+# making a wide dataset
+cdystonia_wide <- cdystonia %>%
+  pivot_wider(
+    id_cols = c(id, trt, site, age, sexc), 
+    names_from = week,                     
+    values_from = twstrs,              
+    names_prefix = "twstrs_"                 
+  ) 
+
+ten_subjects_wide <- cdystonia_wide %>% 
+  head(10)
+
+tbl2 <-
+  ten_subjects_wide %>%
+  dplyr::select(id, trt, age, sexc, twstrs_2, twstrs_4, twstrs_8, twstrs_12, twstrs_16) %>%
+  
+  # 1. Create the gtsummary listing object
+  tbl_listing() %>%
+  
+  # 2. Modify the column headers using modify_header()
+  modify_header(
+    id = "**ID**",
+    trt = "**Group**",
+    age = "**Age**",
+    sexc = "**Sex**",
+    twstrs_2 = "**Week 2**",
+    twstrs_4 = "**Week 4**",
+    twstrs_8 = "**Week 8**",
+    twstrs_12 = "**Week 12**",
+    twstrs_16 = "**Week 16**"
+  ) %>%
+  
+  # 3. Convert to gt and apply final formatting
+  as_gt() %>%
+  gt::tab_header(title="Table 2. TWSTRS scores for 109 patients with CD at weeks 2,4,8,12,16") %>%
+  gt::opt_row_striping()
+
+tbl2
+
 
 ```
 
