@@ -1,5 +1,5 @@
 ---
-title: "BIOS 667 Group Project"
+title: "BIOS 667 Group 5"
 author: 
 - Lily Bai
 - Nathalie Blasco
@@ -132,7 +132,7 @@ as_kable_extra(tbl,
                booktabs=TRUE,
                longtable=TRUE,
                linesep="",
-               caption = "Patient Characteristics at Baseline",
+               caption = "Summary of Demographic and Baseline Characteristics",
                 table.envir = "table",
                table.attr = "position='h!'")
 
