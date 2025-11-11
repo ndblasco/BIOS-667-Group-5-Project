@@ -200,12 +200,61 @@ Rackley \and Sirui Wu}
 \end{table}
  
 
+\subsection{Introduction}\label{introduction}
+
+The purpose of this project is to examine the effects of botulism toxin
+type B (BotB) to treat cervical dystonia over time. Cervical dystonia
+(CD) is a chronic neurological disorder, in which patients have painful
+involuntary contractions in neck muscles. CD is more prevalent in women
+(Jankovic et al., 2023). The prevalence of CD is estimated to be 28-183
+cases per million. The data comes from a multicenter randomized clinical
+trial for cervical dystonia patients with 9 U.S. sites. Botulism toxin
+types A and B are first-line treatments for CD (Wetmore et al., 2025).
+The treatment groups included in the study were placebo, 5000 U BotB,
+and 10000 U BotB. The response variable is Toronto Western Spasmodic
+Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 85
+and is comprised of disability (0-30), pain (0-20), and severity (0-35)
+subscores. Only total score is included in this data.The TWSTRS score
+was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after
+treatment start. Site is included in the dataset but no further details
+about site were included in the available dataset documentation.
+
+\subsection{Methods}\label{methods}
+
+\subsubsection{\texorpdfstring{\emph{Study
+Population}}{Study Population}}\label{study-population}
+
+Inclusion and exclusion criteria for the trial were not available.
+Duration of CD and age at onset were not known. The study included 109
+patients (67 (61\%)) females.The mean age was 56 (12). Median age was 56
+years. The mean TWSTRS score at baseline was 46 (10). It was not known
+if the patients received prior BotB treatments. Information about the
+randomization schedule was not provided.
+
+\subsubsection{\texorpdfstring{\emph{Statistical
+Analyses}}{Statistical Analyses}}\label{statistical-analyses}
+
+Number of observations, mean, median, standard deviation (SD), minimum
+(min) and maximum (max) were provided for age. Mean and SD were
+calculated for TWSTRS score at baseline. Frequencies and percentages
+were reported for categorical variables. GLM, GLMM, and GEE models were
+fit using TWSTRS total score as the response variable and blank, blank,
+blank as covariates.
+
+\subsection{Results}\label{results}
+
+Clear Figures/tables describing and summarizing key outcomes/variables
+Clear Figures/table illustrating results that directly addresses
+question(s) Proper and clear descriptions of results based on figures
+and tables, along with diagnostics Code chunks should be hidden in the
+document, with only text, figures, and tables showing
+
 \begin{longtable}[t]{lccccc}
-\caption{\label{tab:unnamed-chunk-1}Patient Characteristics at Baseline}\\
+\caption{\label{tab:unnamed-chunk-2}Patient Characteristics at Baseline}\\
 \toprule
 \multicolumn{3}{c}{ } & \multicolumn{2}{c}{\textbf{BotB}} & \multicolumn{1}{c}{ } \\
 \cmidrule(l{3pt}r{3pt}){4-5}
-\textbf{Characteristic} & \makecell[c]{\textbf{Overall}\ \ \\N = 109} & \makecell[c]{\textbf{Placebo}\ \ \\N = 36} & \makecell[c]{\textbf{5000U}\ \ \\N = 36} & \makecell[c]{\textbf{10000U}\ \ \\N = 37} & \textbf{p-value}\\
+\textbf{Characteristic} & \makecell[c]{\textbf{Overall}\ \ \\N = 109} & \makecell[c]{\textbf{Placebo}\ \ \\N = 36} & \makecell[c]{\textbf{5000 U}\ \ \\N = 36} & \makecell[c]{\textbf{10000 U}\ \ \\N = 37} & \textbf{p-value}\\
 \midrule
 Sex &  &  &  &  & 0.0706\\
 \hspace{1em}Female & 67 (61\%) & 21 (58\%) & 18 (50\%) & 28 (76\%) & \\
@@ -218,47 +267,41 @@ Age (years) &  &  &  &  & 0.6198\\
 TWSTRS total score at baseline &  &  &  &  & 0.3307\\
 \hspace{1em}Mean (SD) & 46 (10) & 44 (9) & 46 (10) & 47 (10) & \\
 \bottomrule
-\multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{1} n (\%)}\\
+\multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{1} BotB = botulinum toxin type B; TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale.}\\
 \multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{2} Pearson's Chi-squared test; Kruskal-Wallis rank sum test}\\
-\multicolumn{6}{l}{\rule{0pt}{1em}Abbreviation: BotB = botulinum toxin type B;TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale.}\\
 \end{longtable}
 
 \begin{table}[!t]
 \caption*{
-{\large Table 2. TWSTRS scores for 109 patients with CD at weeks 2,4,8,12,16}
+{\large Listing 1. TWSTRS scores for 109 patients with CD at weeks 2,4,8,12,16}
 } 
 \fontsize{12.0pt}{14.4pt}\selectfont
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lllllllll}
 \toprule
 \textbf{ID} & \textbf{Group} & \textbf{Age} & \textbf{Sex} & \textbf{Week 2} & \textbf{Week 4} & \textbf{Week 8} & \textbf{Week 12} & \textbf{Week 16} \\ 
 \midrule\addlinespace[2.5pt]
-1 & 5000U & 65 & Female & 30 & 24 & 37 & 39 & 36 \\ 
-2 & 10000U & 70 & Female & 26 & 27 & 41 & 65 & 67 \\ 
-3 & 5000U & 64 & Female & 20 & 23 & 26 & 35 & 35 \\ 
+1 & 5000 U & 65 & Female & 30 & 24 & 37 & 39 & 36 \\ 
+2 & 10000 U & 70 & Female & 26 & 27 & 41 & 65 & 67 \\ 
+3 & 5000 U & 64 & Female & 20 & 23 & 26 & 35 & 35 \\ 
 4 & Placebo & 59 & Female & 61 & 64 & 62 &  &  \\ 
-5 & 10000U & 76 & Female & 35 & 48 & 49 & 41 & 51 \\ 
-6 & 10000U & 59 & Female & 34 & 43 & 48 & 48 & 51 \\ 
-7 & 5000U & 72 & Male & 32 & 32 & 43 & 42 & 46 \\ 
+5 & 10000 U & 76 & Female & 35 & 48 & 49 & 41 & 51 \\ 
+6 & 10000 U & 59 & Female & 34 & 43 & 48 & 48 & 51 \\ 
+7 & 5000 U & 72 & Male & 32 & 32 & 43 & 42 & 46 \\ 
 8 & Placebo & 40 & Male & 33 & 21 & 27 & 32 & 38 \\ 
-9 & 5000U & 52 & Female & 32 & 34 & 35 & 37 & 36 \\ 
+9 & 5000 U & 52 & Female & 32 & 34 & 35 & 37 & 36 \\ 
 10 & Placebo & 47 & Male & 10 & 31 & 32 & 6 & 14 \\ 
 \bottomrule
 \end{tabular*}
 \end{table}
 
-\subsection{Introduction}\label{introduction}
+\subsection{Discussion}\label{discussion}
 
-The purpose of this project is to examine the effects of botulism toxin
-type B (BotB) to treat cervical dystonia over time. The data comes from
-a multicenter randomized clinical trial for cervical dystonia patients
-with 9 U.S. sites. The treatment groups included in the study were
-placebo, 5000U BotB, and 10000U BotB. The response variable is Toronto
-Western Spasmodic Torticollis Rating Scale (TWSTRS). The TWSTRS score
-was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after
-treatment start.
-
-\subsection{Methods}\label{methods}
+Summarization of main points, conclusions based in results Summarization
+of the various models applied, which ones you prefer and base your
+interpretations off of and why Discussion of limitations if any
 
 \subsection{References}\label{references}
+
+Add references here later
 
 \end{document}
