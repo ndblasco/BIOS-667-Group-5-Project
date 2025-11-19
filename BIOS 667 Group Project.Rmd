@@ -33,31 +33,34 @@ library(knitr) # for tidying output
 })
 
 # Read in data
-cdystonia <- read_dta("Data/cdystonia.dta") # mapping to Data folder in GitHub repo
+cdystonia <- read_dta("cdystonia.dta") # mapping to Data folder in GitHub repo
 
 # Inspect data
 head(cdystonia)
 
 cdystonia <- cdystonia %>% dplyr::mutate(
-    trt = dplyr::case_when(
+    treat = dplyr::case_when(
       treat == 1 ~ "10000 U",
       treat == 2 ~ "5000 U",
       treat == 3 ~ "Placebo"
     ),
-    trt = factor(trt, levels = c("Placebo", "5000 U", "10000 U")),
-    sexc = dplyr::case_when(
+    treat = factor(treat, levels = c("Placebo", "5000 U", "10000 U")),
+    sex = dplyr::case_when(
       sex == 1 ~ "Female",
       sex == 2 ~ "Male")
     ,
-    sexc = factor(sexc, levels = c("Male", "Female"))) 
+    sex = factor(sex, levels = c("Male", "Female")),
+    site = factor(site, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9"))) 
+```
 
+```{r}
 # Filter to only week 0
 cdystonia_wk0 <- cdystonia %>%
   filter(week == 0)
 
 tbl <- cdystonia_wk0 |>
-  tbl_summary(by = trt, 
-              include = c(sexc, age,twstrs),
+  tbl_summary(by = treat, 
+              include = c(sex, age,twstrs),
               type=all_continuous()~"continuous2",
               label = list(sexc = "Sex",age~"Age (years)",twstrs="TWSTRS total score at baseline"),
               statistic = list(
@@ -82,7 +85,7 @@ tbl <- cdystonia_wk0 |>
 # making a wide dataset
 cdystonia_wide <- cdystonia %>%
   pivot_wider(
-    id_cols = c(id, trt, site, age, sexc), 
+    id_cols = c(id, treat, site, age, sex), 
     names_from = week,                     
     values_from = twstrs,              
     names_prefix = "twstrs_"                 
@@ -93,7 +96,7 @@ ten_subjects_wide <- cdystonia_wide %>%
 
 tbl2 <-
   ten_subjects_wide %>%
-  dplyr::select(id, trt, age, sexc, twstrs_2, twstrs_4, twstrs_8, twstrs_12, twstrs_16) %>%
+  dplyr::select(id, treat, age, sex, twstrs_2, twstrs_4, twstrs_8, twstrs_12, twstrs_16) %>%
   
   # 1. Create the gtsummary listing object
   tbl_listing() %>%
@@ -118,21 +121,22 @@ tbl2 <-
 ```
 
 ## Introduction
+
 The purpose of this project is to examine the effects of botulism toxin type B (BotB) to treat cervical dystonia over time. Cervical dystonia (CD) is a chronic neurological disorder, in which patients have painful involuntary contractions in neck muscles. CD is more prevalent in women (Jankovic et al., 2023). The prevalence of CD is estimated to be 28-183 cases per million. The data comes from a multicenter randomized clinical trial for cervical dystonia patients with 9 U.S. sites. Botulism toxin types A and B are first-line treatments for CD (Wetmore et al., 2025). The treatment groups included in the study were placebo, 5000 U BotB, and 10000 U BotB. The response variable is Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 85 and is comprised of disability (0-30), pain (0-20), and severity (0-35) subscores. Only total score is included in this data.The TWSTRS score was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after treatment start. Site is included in the dataset but no further details about site were included in the available dataset documentation.
 
 ## Methods
 
 ### *Study Population*
-Inclusion and exclusion criteria for the trial were not available. Duration of CD and age at onset were not known. The study included 109 patients (67 (61%)) females.The mean age was 56 (12). Median age was 56 years. The mean TWSTRS score at baseline was 46 (10). It was not known if the patients received prior BotB treatments. Information about the randomization schedule was not provided. 
+
+Inclusion and exclusion criteria for the trial were not available. Duration of CD and age at onset were not known. The study included 109 patients (67 (61%)) females.The mean age was 56 (12). Median age was 56 years. The mean TWSTRS score at baseline was 46 (10). It was not known if the patients received prior BotB treatments. Information about the randomization schedule was not provided.
 
 ### *Statistical Analyses*
+
 Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable and blank, blank, blank as covariates.
 
 ## Results
-Clear Figures/tables describing and summarizing key outcomes/variables
-Clear Figures/table illustrating results that directly addresses question(s)
-Proper and clear descriptions of results based on figures and tables, along with diagnostics
-Code chunks should be hidden in the document, with only text, figures, and tables showing
+
+Clear Figures/tables describing and summarizing key outcomes/variables Clear Figures/table illustrating results that directly addresses question(s) Proper and clear descriptions of results based on figures and tables, along with diagnostics Code chunks should be hidden in the document, with only text, figures, and tables showing
 
 ```{r,echo=FALSE}
 # adding Table 1
@@ -145,14 +149,15 @@ as_kable_extra(tbl,
                table.attr = "position='h!'")
 
 # adding Table 2
-tbl2
+# tbl2
 
 # someone help position these. table 1 should come before table 2
 ```
 
 ### Generalized Linear Model (GLM)
 
-A generalized linear model (GLM model) using a Gaussian link was fit including week, site, treatment, age, and sex as predictors (Table 2). 
+A generalized linear model (GLM model) using a Gaussian link was fit including week, site, treatment, age, and sex as predictors (Table 2).
+
 ```{r}
 # Fit a GLM
 glm_fit <- glm(twstrs ~ week + treat + age + sex + site,
@@ -163,10 +168,13 @@ glm_fit <- glm(twstrs ~ week + treat + age + sex + site,
 
 kable(tidy(glm_fit), digits=3, caption = "Table 2: GLM Model Summary (Gaussian Link)")
 ```
-The coefficient for week was statistically significant, indicating an overall linear trend in TWSTRS score over time. However, because the GLM assumes independence of observations, the repeated measures within individuals violate this assumption. As a result, the standard errors and p-values may be underestimated, and inference should be interpreted with caution. This motivates the subsequent use of correlation-aware models such as GEE and GLMM.
+
+The coefficient for week was statistically significant, indicating an overall linear trend in TWSTRS score over time. There was notable variation across study sites, with several sites showing significantly higher TWSTRS scores compared to the reference site, highlighting site-level differences. However, because the GLM assumes independence of observations, the repeated measures within individuals violate this assumption. As a result, the standard errors and p-values may be underestimated, and inference should be interpreted with caution. This motivates the subsequent use of correlation-aware models such as GEE and GLMM.
 
 ### GLM Model Diagnostics
-Diagnostics were assessed for the GLM model. 
+
+Diagnostics were assessed for the GLM model.
+
 ```{r}
 # Residuals vs Fitted
 res <- residuals(glm_fit)
@@ -178,7 +186,8 @@ plot(fit, res,
      main = "Figure 1: Residuals vs Fitted Plot")
 abline(h = 0, col = "red", lty = 2, lwd = 2)
 ```
-Figure 1 shows the residuals versus the fitted values. The absence of strong patterns or fanning suggests that the linearity and homoscedasticity assumptions are reasonably met. 
+
+Figure 1 shows the residuals versus the fitted values. The absence of strong patterns or fanning suggests that the linearity and homoscedasticity assumptions are reasonably met.
 
 ```{r}
 # Normal Q-Q plot of residuals
@@ -191,7 +200,8 @@ qqnorm(res,
 qqline(res, col = "red", lwd = 2)
 
 ```
-Figure 2 presents a QQ plot of the residuals, which largely follow the 45 degree reference line with mild deviations in the tails. This indicates that the normality assumption is approximately satisfied. 
+
+Figure 2 presents a QQ plot of the residuals, which largely follow the 45 degree reference line with mild deviations in the tails. This indicates that the normality assumption is approximately satisfied.
 
 ```{r}
 # Cook's distance
@@ -203,7 +213,8 @@ plot(cooks, type = "h",
      xlab = "Observation")
 abline(h = 4/(length(cooks)-length(coef(glm_fit))), col = "red", lty = 2, lwd = 2)
 ```
-Finally, figure 3 displays Cook's distance for all observations. The conventional threshold, 4/(n-k-1), where n is the number of observations and k is the number of predictors, was used to assess the influence of the observations. Several observations exceeded the threshold and were considered potentially influential and warranted further investigation. Therefore, a second GLM  was fit, excluding those observations.
+
+Finally, figure 3 displays Cook's distance for all observations. The conventional threshold, 4/(n-k-1), where n is the number of observations and k is the number of predictors, was used to assess the influence of the observations. Several observations exceeded the threshold and were considered potentially influential and warranted further investigation. Therefore, a second GLM was fit, excluding those observations.
 
 ```{r}
 # Identify influential points
@@ -222,15 +233,14 @@ kable(tidy(glm(twstrs ~ week + treat + age + sex + site,
                               family = gaussian())), digits=3, caption = "Table 3: GLM Model Summary (Excluding Influential Observations)")
 ```
 
-Excluding influential observations resulted in modest shifts in the parameter estimates and slightly improved precision. Notably, the effects of sex and week became stronger and statistically significant. The direction of all effects remained consistent with the original model, suggesting that the influential observations primarily affected precision rather than the overall patterns of association. 
+Excluding influential observations resulted in modest shifts in the parameter estimates and slightly improved precision. Notably, the effect of week remained statistically significant and variation across study sites continued to be pronounced. This underscores that site-level differences remain important even after removing influential observation.s
 
-Overall, while the GLM provides a reasonable descriptive summary, its assumptions are not appropriate for longitudinal data with correlated repeated measures. The following GEE and GLMM analyses address this limitation by explicitly modeling within-subject correlation and random effects. 
+Overall, excluding influential points slightly adjusted the estimates and improved precision, but the main patterns of association were consistent with the original GLM. As with the previous model, the GLM assumptions are not appropriate for longitudinal data with correlated repeated measures. The following GEE and GLMM analyses address this limitation by explicitly modeling within-subject correlation and random effects.
 
 ## Discussion
-Summarization of main points, conclusions based in results
-Summarization of the various models applied, which ones you prefer and base your interpretations off of and why
-Discussion of limitations if any
 
+Summarization of main points, conclusions based in results Summarization of the various models applied, which ones you prefer and base your interpretations off of and why Discussion of limitations if any
 
 ## References
+
 Add references here later
