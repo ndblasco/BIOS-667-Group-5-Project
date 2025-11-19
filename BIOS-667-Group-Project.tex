@@ -37,6 +37,16 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
 \newsavebox\pandoc@box
@@ -77,7 +87,6 @@
 \usepackage{tabularx}
 \usepackage{adjustbox}
 \usepackage{hyperref}
-\usepackage{anyfontsize}
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
@@ -238,9 +247,8 @@ Number of observations, mean, median, standard deviation (SD), minimum
 (min) and maximum (max) were provided for age. Mean and SD were
 calculated for TWSTRS score at baseline. Frequencies and percentages
 were reported for categorical variables. GLM, GLMM, and GEE models were
-fit using TWSTRS total score as the response variable and week, site,
-treatment, age, and sex as predictors. Placebo and male sex were the
-referent groups.
+fit using TWSTRS total score as the response variable and blank, blank,
+blank as covariates.
 
 \subsection{Results}\label{results}
 
@@ -251,15 +259,15 @@ and tables, along with diagnostics Code chunks should be hidden in the
 document, with only text, figures, and tables showing
 
 \begin{longtable}[t]{lccccc}
-\caption{\label{tab:unnamed-chunk-2}Summary of Demographic and Baseline Characteristics}\\
+\caption{\label{tab:unnamed-chunk-3}Summary of Demographic and Baseline Characteristics}\\
 \toprule
 \multicolumn{3}{c}{ } & \multicolumn{2}{c}{\textbf{BotB}} & \multicolumn{1}{c}{ } \\
 \cmidrule(l{3pt}r{3pt}){4-5}
 \textbf{Characteristic} & \makecell[c]{\textbf{Overall}\ \ \\N = 109} & \makecell[c]{\textbf{Placebo}\ \ \\N = 36} & \makecell[c]{\textbf{5000 U}\ \ \\N = 36} & \makecell[c]{\textbf{10000 U}\ \ \\N = 37} & \textbf{p-value}\\
 \midrule
-Sex &  &  &  &  & 0.0706\\
-\hspace{1em}Female & 67 (61\%) & 21 (58\%) & 18 (50\%) & 28 (76\%) & \\
+sex &  &  &  &  & 0.0706\\
 \hspace{1em}Male & 42 (39\%) & 15 (42\%) & 18 (50\%) & 9 (24\%) & \\
+\hspace{1em}Female & 67 (61\%) & 21 (58\%) & 18 (50\%) & 28 (76\%) & \\
 Age (years) &  &  &  &  & 0.6198\\
 \hspace{1em}No. obs. & 109 & 36 & 36 & 37 & \\
 \hspace{1em}Mean (SD) & 56 (12) & 54 (12) & 57 (12) & 56 (12) & \\
@@ -272,28 +280,119 @@ TWSTRS total score at baseline &  &  &  &  & 0.3307\\
 \multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{2} Pearson's Chi-squared test; Kruskal-Wallis rank sum test}\\
 \end{longtable}
 
-\begin{table}[!t]
-\caption*{
-{\large Listing 1. TWSTRS scores for 109 patients with CD at weeks 2,4,8,12,16}
-} 
-\fontsize{12.0pt}{14.4pt}\selectfont
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lllllllll}
-\toprule
-\textbf{ID} & \textbf{Group} & \textbf{Age} & \textbf{Sex} & \textbf{Week 2} & \textbf{Week 4} & \textbf{Week 8} & \textbf{Week 12} & \textbf{Week 16} \\ 
-\midrule\addlinespace[2.5pt]
-1 & 5000 U & 65 & Female & 30 & 24 & 37 & 39 & 36 \\ 
-2 & 10000 U & 70 & Female & 26 & 27 & 41 & 65 & 67 \\ 
-3 & 5000 U & 64 & Female & 20 & 23 & 26 & 35 & 35 \\ 
-4 & Placebo & 59 & Female & 61 & 64 & 62 &  &  \\ 
-5 & 10000 U & 76 & Female & 35 & 48 & 49 & 41 & 51 \\ 
-6 & 10000 U & 59 & Female & 34 & 43 & 48 & 48 & 51 \\ 
-7 & 5000 U & 72 & Male & 32 & 32 & 43 & 42 & 46 \\ 
-8 & Placebo & 40 & Male & 33 & 21 & 27 & 32 & 38 \\ 
-9 & 5000 U & 52 & Female & 32 & 34 & 35 & 37 & 36 \\ 
-10 & Placebo & 47 & Male & 10 & 31 & 32 & 6 & 14 \\ 
-\bottomrule
-\end{tabular*}
-\end{table}
+\subsubsection{Generalized Linear Model
+(GLM)}\label{generalized-linear-model-glm}
+
+A generalized linear model (GLM model) using a Gaussian link was fit
+including week, site, treatment, age, and sex as predictors (Table 2).
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{GLM Model Summary (Gaussian Link)}\tabularnewline
+\toprule\noalign{}
+term & estimate & std.error & statistic & p.value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+term & estimate & std.error & statistic & p.value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 30.227 & 2.850 & 10.605 & 0.000 \\
+week & 0.234 & 0.080 & 2.923 & 0.004 \\
+treat5000 U & -0.030 & 1.120 & -0.027 & 0.978 \\
+treat10000 U & 0.287 & 1.127 & 0.254 & 0.799 \\
+age & 0.072 & 0.039 & 1.854 & 0.064 \\
+sexFemale & 1.938 & 1.006 & 1.927 & 0.054 \\
+site2 & 13.216 & 1.860 & 7.107 & 0.000 \\
+site3 & -2.183 & 1.933 & -1.130 & 0.259 \\
+site4 & 4.635 & 2.132 & 2.174 & 0.030 \\
+site5 & 7.403 & 2.413 & 3.068 & 0.002 \\
+site6 & 9.617 & 1.849 & 5.201 & 0.000 \\
+site7 & 1.862 & 1.912 & 0.974 & 0.331 \\
+site8 & -2.493 & 1.773 & -1.406 & 0.160 \\
+site9 & 10.198 & 2.011 & 5.071 & 0.000 \\
+\end{longtable}
+
+The coefficient for week was statistically significant, indicating an
+overall linear trend in TWSTRS score over time. There was notable
+variation across study sites, with several sites showing significantly
+higher TWSTRS scores compared to the reference site, highlighting
+site-level differences. However, because the GLM assumes independence of
+observations, the repeated measures within individuals violate this
+assumption. As a result, the standard errors and p-values may be
+underestimated, and inference should be interpreted with caution. This
+motivates the subsequent use of correlation-aware models such as GEE and
+GLMM.
+
+\subsubsection{GLM Model Diagnostics}\label{glm-model-diagnostics}
+
+Diagnostics were assessed for the GLM model.
+
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-5-1.pdf}}
+
+Figure 1 shows the residuals versus the fitted values. The absence of
+strong patterns or fanning suggests that the linearity and
+homoscedasticity assumptions are reasonably met.
+
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-6-1.pdf}}
+
+Figure 2 presents a QQ plot of the residuals, which largely follow the
+45 degree reference line with mild deviations in the tails. This
+indicates that the normality assumption is approximately satisfied.
+
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-7-1.pdf}}
+
+Finally, figure 3 displays Cook's distance for all observations. The
+conventional threshold, 4/(n-k-1), where n is the number of observations
+and k is the number of predictors, was used to assess the influence of
+the observations. Several observations exceeded the threshold and were
+considered potentially influential and warranted further investigation.
+Therefore, a second GLM was fit, excluding those observations.
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Table 3: GLM Model Summary (Excluding Influential
+Observations)}\tabularnewline
+\toprule\noalign{}
+term & estimate & std.error & statistic & p.value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+term & estimate & std.error & statistic & p.value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 31.836 & 2.571 & 12.384 & 0.000 \\
+week & 0.215 & 0.072 & 3.002 & 0.003 \\
+treat5000 U & -0.185 & 1.004 & -0.184 & 0.854 \\
+treat10000 U & 0.800 & 1.001 & 0.799 & 0.424 \\
+age & 0.050 & 0.035 & 1.449 & 0.148 \\
+sexFemale & 1.046 & 0.903 & 1.158 & 0.247 \\
+site2 & 13.405 & 1.667 & 8.043 & 0.000 \\
+site3 & -1.417 & 1.741 & -0.814 & 0.416 \\
+site4 & 7.636 & 1.947 & 3.921 & 0.000 \\
+site5 & 10.761 & 2.283 & 4.714 & 0.000 \\
+site6 & 10.152 & 1.661 & 6.111 & 0.000 \\
+site7 & 2.380 & 1.707 & 1.394 & 0.164 \\
+site8 & -3.384 & 1.605 & -2.108 & 0.035 \\
+site9 & 10.049 & 1.861 & 5.400 & 0.000 \\
+\end{longtable}
+
+Excluding influential observations resulted in modest shifts in the
+parameter estimates and slightly improved precision. Notably, the effect
+of week remained statistically significant and variation across study
+sites continued to be pronounced. This underscores that site-level
+differences remain important even after removing influential
+observation.s
+
+Overall, excluding influential points slightly adjusted the estimates
+and improved precision, but the main patterns of association were
+consistent with the original GLM. As with the previous model, the GLM
+assumptions are not appropriate for longitudinal data with correlated
+repeated measures. The following GEE and GLMM analyses address this
+limitation by explicitly modeling within-subject correlation and random
+effects.
 
 \subsection{Discussion}\label{discussion}
 
