@@ -14,7 +14,20 @@ This dataset in from Table 6.9 of Statistical Methods for the Analysis of Repeat
 
 **To read dta file into R:**  
 library(haven)  
-df <- read_dta("cdystonia.dta")  
+cdystonia <- read_dta("cdystonia.dta")  
+cdystonia <- cdystonia %>% dplyr::mutate(
+    treat = dplyr::case_when(
+      treat == 1 ~ "10000 U",
+      treat == 2 ~ "5000 U",
+      treat == 3 ~ "Placebo"
+    ),
+    treat = factor(treat, levels = c("Placebo", "5000 U", "10000 U")),
+    sex = dplyr::case_when(
+      sex == 1 ~ "Female",
+      sex == 2 ~ "Male")
+    ,
+    sex = factor(sex, levels = c("Male", "Female")),
+    site = factor(site, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9")))
 
 **Workload Split:**  
 * Intro/Methods: Lauren  
