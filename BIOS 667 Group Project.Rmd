@@ -230,7 +230,7 @@ df_no_influential <- cdystonia[-influential_points, ]
 # Refit the model using the cleaned data frame
 kable(tidy(glm(twstrs ~ week + treat + age + sex + site,
                               data = df_no_influential,
-                              family = gaussian())), digits=3, caption = "Table 3: GLM Model Summary (Excluding Influential Observations)")
+                              family = gaussian())), digits=3, caption = "GLM Model Summary (Excluding Influential Observations)")
 ```
 
 Excluding influential observations resulted in modest shifts in the parameter estimates and slightly improved precision. Notably, the effect of week remained statistically significant and variation across study sites continued to be pronounced. This underscores that site-level differences remain important even after removing influential observation.s
