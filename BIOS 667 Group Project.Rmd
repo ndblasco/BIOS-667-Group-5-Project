@@ -35,6 +35,11 @@ library(gtreg) # for making tables
 library(knitr) # for tidying output
 library(ggplot2) # for plotting
 library(geepack) # for fitting GEE models
+library(emmeans) # for GLMM
+library(lmerTest)
+library(lme4)
+library(broom.mixed)
+library(patchwork) 
 })
 
 # Read in data
@@ -316,6 +321,152 @@ tidy(gee_main, effects = "fixed") %>%
 ```
 
 Table 4 summarizes the GEE estimates for TWSTRS over time by treatment, adjusted for age and sex. The main effects for treat5000U (−0.810, p = 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at week 0 with placebo. Both estimates are negative but not statistically significant, indicating no clear baseline differences in mean TWSTRS between treatment groups and placebo. The treatment-by-week interaction terms describe how each treatment's trajectory differs from placebo over time. For 5000U, the additional slope relative to placebo is small and not significant (0.115, p = 0.388), suggesting that its average linear trend over time is similar to placebo. For 10000U, the additional slope is larger and statistically significant (0.323, p = 0.027), indicating an average increase in TWSTRS over 16 weeks compared with placebo. Because higher TWSTRS scores reflect worse symptoms, these results imply that low-dose regimen behaves similarly to placebo, while the high-dose regimen is associated with faster worsening over time. Overall, the GEE model provides a reasonable approach for assessing whether treatment affects population-average TWSTRS trajectories over time, while recognizing that the true time course is somewhat non-linear and that estimated treatment effects are relatively small.
+
+### Generalized Linear Mixed Effects Model (GLMM) 
+
+While the GEE model provides population-averaged estimates, we implemented a Generalized Linear Mixed Model (GLMM) to model subject-specific heterogeneity. By including a random intercept, the GLMM partitions the total variance into between-subject and within-subject components, allowing us to estimate treatment trajectories conditional on an individual patient's unique baseline severity. Additionally, because GLMM uses likelihood-based estimation, they provide valid inference under the Missing at Random (MAR) assumption.
+
+```{r}
+cdystonia_glmm <- cdystonia %>%
+  mutate(
+    treat = haven::as_factor(treat),
+    sex   = haven::as_factor(sex),
+    subj = interaction(site, id, drop = TRUE) 
+  )
+cdystonia_glmm$treat <- relevel(cdystonia_glmm$treat, ref = "Placebo")
+cdystonia_glmm$sex <- relevel(cdystonia_glmm$sex, ref = "Male")
+```
+
+
+```{r}
+# Fit a GLMM Model
+glmm_fit <- lmer(twstrs ~ treat*week + age + sex + (1 | subj), 
+                 data = cdystonia_glmm)
+broom.mixed::tidy(glmm_fit, effects = "fixed", conf.int = TRUE) %>%
+  kable(digits = 3, caption = "Table 5. GLMM Model Summary")
+```
+
+Table 5 presents the fixed effect estimates from the linear mixed model. Consistent with the previous GEE analysis, the point estimates for the fixed effects are identical, as expected for a linear model with a Gaussian distribution. However, the standard errors and p-values differ slightly reflecting the distinction between model-based (GLMM) and robust (GEE) variance estimation.
+
+At baseline, there were no statistically significant differences in disease severity between the treatment arms and the placebo group. Neither age or sex are significant predictors for TWSTRS. The primary finding is the significant interaction between the 10000 U treatment and week ($\beta = 0.323, SE = 0.125, p = 0.010$). This confirms that, conditional on the individual patient, the high-dose group experienced a significantly faster rate of worsening, increasing by approximately 0.32 points per week relative to the placebo group.
+
+```{r, message=FALSE}
+# Compare the random intercept model to the random slope model
+glmm_fit2 <- lmer(twstrs ~ treat*week + age + sex + (1 + week | subj), 
+                 data = cdystonia_glmm)
+#broom.mixed::tidy(glmm_fit2, effects = "fixed", conf.int = TRUE)
+anova(glmm_fit, glmm_fit2)
+```
+The anova analysis shows that random slope model is not better than the random intercept model.
+
+```{r}
+# Calculate predicted TWSTRS scores at different week
+emm_results <- emmeans(glmm_fit, specs = ~ treat | week,
+                       at = list(week = c(0, 2, 4, 8, 12, 16)))
+emm_results
+
+# Plot the Estimated Marginal Means (Interaction Plot)
+emm_df <- as.data.frame(emm_results)
+ggplot(emm_df, aes(x = week, y = emmean, color = treat, group = treat)) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = 0.5, alpha = 0.5) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  labs(
+    title = "Figure 6. Conditional Predictions of TWSTRS Score at Different Times",
+    y = "Estimated Mean TWSTRS Score",
+    x = "Week",
+    color = "Treatment"
+  )
+```
+Figure 6 illustrates the model-predicted trajectories for TWSTRS across the three treatment groups. The blue line representing 10000 U treatment and the red line for placebo cross each other, showing the significant interaction term between 10000 U and week. The relationship between treatment and score depends on time.
+
+```{r}
+# Subject-Level Predictions
+preds <- augment(glmm_fit, data = cdystonia_glmm)
+
+# Pick 9 random subjects to visualize
+set.seed(123)
+sample_subjects <- sample(unique(cdystonia_glmm$subj), 9)
+
+preds %>%
+  filter(subj %in% sample_subjects) %>%
+  ggplot(aes(x = week, y = .fitted, color = treat, group = subj)) +
+  geom_line(alpha = 0.8) +
+  geom_point(aes(y = twstrs), shape = 21, fill = "white", size = 2) +
+  labs(y = "TWSTRS Score", 
+       x = "Week",
+       title = "Figure 7. Subject-Specific Predicted Trajectories",
+       subtitle = "Lines = GLMM fitted values (BLUPs); Points = Observed Data") +
+  theme_minimal()
+```
+
+Figure 7 displays the observed TWSTRS scores (points) overlaying the GLMM fitted trajectories (lines) for a random sample of 12 subjects. The heterogeneity at baseline confirms the necessity of including a random intercept for each subject to account for patient-specific heterogeneity, suggesting that much of the variance arises from pre-existing differences between patients.
+
+The relationship between the solid lines and scattered points demonstrates how the model generates Best Linear Unbiased Predictions (BLUPs) for each subject. Instead of overfitting to the noisy week-to-week fluctuations observed in the raw data points, the model fits smooth linear trajectories that balance individual trends with the overall population average.
+
+```{r}
+# Diagnostics
+# 1. Residual Diagnostics
+# Pearson Residuals vs Fitted
+p1 <- tibble(
+  fitted = fitted(glmm_fit),
+  resid = residuals(glmm_fit, type = "pearson")
+) %>%
+  ggplot(aes(x = fitted, y = resid)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  geom_smooth(se = FALSE, color = "blue") +
+  theme_minimal() +
+  labs(x = "Fitted Values", y = "Pearson Residuals",
+       title = "Figure 8. Residuals vs Fitted")
+
+# Residuals vs Time (Week)
+p2 <- tibble(
+  week = cdystonia_glmm$week,
+  resid = residuals(glmm_fit, type = "pearson")
+) %>%
+  ggplot(aes(x = week, y = resid)) +
+  geom_jitter(alpha = 0.5, width = 0.2) + # Jitter added to see overlapping points
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  geom_smooth(se = FALSE, color = "blue") +
+  theme_minimal() +
+  labs(x = "Week", y = "Pearson Residuals",
+       title = "Figure 9. Residuals vs Time")
+
+# Combine plots
+p1 + p2
+
+# 2. Random Effects Diagnostics
+
+# Extract random effects (Intercepts only)
+rand_effects <- ranef(glmm_fit)$subj %>%
+  tibble::rownames_to_column("subj") %>%
+  rename(intercept = `(Intercept)`)
+
+# Q-Q Plot for Random Intercepts
+p3 <- ggplot(rand_effects, aes(sample = intercept)) +
+  stat_qq() +
+  stat_qq_line(color = "red", linewidth = 1) +
+  theme_minimal() +
+  labs(title = "Figure 10. Q-Q Plot of Random Intercepts",
+       x = "Theoretical Quantiles", y = "Sample Quantiles")
+
+p3
+
+# 3. Convergence Checks
+
+print(glmm_fit@optinfo$conv)
+
+```
+
+The plot of Pearson residuals against fitted values (Figure 8) shows a random scatter of points around the zero line without a distinct funnel shape. This indicates that the assumption of constant variance (homoscedasticity) is reasonably satisfied, and the linear mean structure is adequate. The plot of residuals against time (Figure 9) displays a slight non-linear trend. The dip suggests that the model is overpredicting the TWSTRS scores around Weeks 4 and 5. However, the residuals generally remain centered near zero, indicating the linear approximation is adequate for the primary analysis.
+
+The Q-Q plot for the random intercepts (Figure 10) assesses the assumption that subject-specific deviations follow a normal distribution. The points fall closely along the red diagonal reference line, with only negligible deviations at the extreme tails. This confirms that the assumption of normally distributed random effects is well satisfied.
+
+We also confirm that the model converged successfully.
+
+
 
 
 ## Discussion
