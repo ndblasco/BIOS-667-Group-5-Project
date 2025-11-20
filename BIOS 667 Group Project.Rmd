@@ -60,13 +60,13 @@ cdystonia <- cdystonia %>% dplyr::mutate(
 ```{r}
 # Filter to only week 0
 cdystonia_wk0 <- cdystonia %>%
-  filter(week == 0)
+  dplyr::filter(week == 0)
 
 tbl <- cdystonia_wk0 |>
   tbl_summary(by = treat, 
               include = c(sex, age,twstrs),
               type=all_continuous()~"continuous2",
-              label = list(sexc = "Sex",age~"Age (years)",twstrs="TWSTRS total score at baseline"),
+              label = list(sex = "Sex",age~"Age (years)",twstrs="TWSTRS total score at baseline"),
               statistic = list(
       age ~ c(
       "{N_obs}",
@@ -126,7 +126,7 @@ tbl2 <-
 
 ## Introduction
 
-The purpose of this project is to examine the effects of botulism toxin type B (BotB) to treat cervical dystonia over time. Cervical dystonia (CD) is a chronic neurological disorder, in which patients have painful involuntary contractions in neck muscles. CD is more prevalent in women (Jankovic et al., 2023). The prevalence of CD is estimated to be 28-183 cases per million. The data comes from a multicenter randomized clinical trial for cervical dystonia patients with 9 U.S. sites. Botulism toxin types A and B are first-line treatments for CD (Wetmore et al., 2025). The treatment groups included in the study were placebo, 5000 U BotB, and 10000 U BotB. The response variable is Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 85 and is comprised of disability (0-30), pain (0-20), and severity (0-35) subscores. Only total score is included in this data.The TWSTRS score was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after treatment start. Site is included in the dataset but no further details about site were included in the available dataset documentation.
+The purpose of this project is to examine the effects of botulism toxin type B (BotB) to treat cervical dystonia over time. Cervical dystonia (CD) is a chronic neurological disorder, in which patients have painful involuntary contractions in neck muscles. CD is more prevalent in women [@jankovic_treatment_2023]. The prevalence of CD is estimated to be 28-183 cases per million. The data comes from a multicenter randomized clinical trial for cervical dystonia patients with 9 U.S. sites. Botulism toxin types A and B are first-line treatments for CD [@wetmore_clinical_2025]. The treatment groups included in the study were placebo, 5000 U BotB, and 10000 U BotB. The response variable is Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 85 and is comprised of disability (0-30), pain (0-20), and severity (0-35) subscores. Only total score is included in this data.The TWSTRS score was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after treatment start. Site is included in the dataset but no further details about site were included in the available dataset documentation.
 
 ## Methods
 
@@ -139,8 +139,6 @@ Inclusion and exclusion criteria for the trial were not available. Duration of C
 Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable and blank, blank, blank as covariates.
 
 ## Results
-
-Clear Figures/tables describing and summarizing key outcomes/variables Clear Figures/table illustrating results that directly addresses question(s) Proper and clear descriptions of results based on figures and tables, along with diagnostics Code chunks should be hidden in the document, with only text, figures, and tables showing
 
 ```{r,echo=FALSE}
 # adding Table 1
@@ -302,7 +300,7 @@ ggplot(mean_profile, aes(x = week, y = mean_twstrs, colour = treat)) +
   labs(
     title = "Figure 5. Mean TWSTRS Over Time by Treatment",
     x     = "Week",
-    y     = "Mean TWSTRS (± SE)",
+    y     = "Mean TWSTRS",
     colour = "Treatment"
   )
 ```
@@ -323,4 +321,3 @@ Summarization of main points, conclusions based in results Summarization of the 
 
 ## References
 
-Add references here later
