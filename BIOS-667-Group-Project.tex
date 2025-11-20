@@ -266,8 +266,8 @@ document, with only text, figures, and tables showing
 \textbf{Characteristic} & \makecell[c]{\textbf{Overall}\ \ \\N = 109} & \makecell[c]{\textbf{Placebo}\ \ \\N = 36} & \makecell[c]{\textbf{5000 U}\ \ \\N = 36} & \makecell[c]{\textbf{10000 U}\ \ \\N = 37} & \textbf{p-value}\\
 \midrule
 sex &  &  &  &  & 0.0706\\
-\hspace{1em}Male & 42 (39\%) & 15 (42\%) & 18 (50\%) & 9 (24\%) & \\
 \hspace{1em}Female & 67 (61\%) & 21 (58\%) & 18 (50\%) & 28 (76\%) & \\
+\hspace{1em}Male & 42 (39\%) & 15 (42\%) & 18 (50\%) & 9 (24\%) & \\
 Age (years) &  &  &  &  & 0.6198\\
 \hspace{1em}No. obs. & 109 & 36 & 36 & 37 & \\
 \hspace{1em}Mean (SD) & 56 (12) & 54 (12) & 57 (12) & 56 (12) & \\
@@ -298,12 +298,12 @@ term & estimate & std.error & statistic & p.value \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-(Intercept) & 30.227 & 2.850 & 10.605 & 0.000 \\
+(Intercept) & 32.166 & 2.767 & 11.624 & 0.000 \\
 week & 0.234 & 0.080 & 2.923 & 0.004 \\
 treat5000 U & -0.030 & 1.120 & -0.027 & 0.978 \\
 treat10000 U & 0.287 & 1.127 & 0.254 & 0.799 \\
 age & 0.072 & 0.039 & 1.854 & 0.064 \\
-sexFemale & 1.938 & 1.006 & 1.927 & 0.054 \\
+sexMale & -1.938 & 1.006 & -1.927 & 0.054 \\
 site2 & 13.216 & 1.860 & 7.107 & 0.000 \\
 site3 & -2.183 & 1.933 & -1.130 & 0.259 \\
 site4 & 4.635 & 2.132 & 2.174 & 0.030 \\
@@ -363,12 +363,12 @@ term & estimate & std.error & statistic & p.value \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-(Intercept) & 31.836 & 2.571 & 12.384 & 0.000 \\
+(Intercept) & 32.882 & 2.478 & 13.272 & 0.000 \\
 week & 0.215 & 0.072 & 3.002 & 0.003 \\
 treat5000 U & -0.185 & 1.004 & -0.184 & 0.854 \\
 treat10000 U & 0.800 & 1.001 & 0.799 & 0.424 \\
 age & 0.050 & 0.035 & 1.449 & 0.148 \\
-sexFemale & 1.046 & 0.903 & 1.158 & 0.247 \\
+sexMale & -1.046 & 0.903 & -1.158 & 0.247 \\
 site2 & 13.405 & 1.667 & 8.043 & 0.000 \\
 site3 & -1.417 & 1.741 & -0.814 & 0.416 \\
 site4 & 7.636 & 1.947 & 3.921 & 0.000 \\
@@ -397,44 +397,12 @@ effects.
 \subsubsection{Generalized Estimating Equation
 (GEE)}\label{generalized-estimating-equation-gee}
 
-\begin{verbatim}
-## 
-## Call:
-## geeglm(formula = twstrs ~ week * treat + age + sex, family = gaussian, 
-##     data = data_gee, id = subj, corstr = "exchangeable")
-## 
-##  Coefficients:
-##                   Estimate  Std.err   Wald Pr(>|W|)    
-## (Intercept)       38.69832  4.76001 66.095 4.44e-16 ***
-## week               0.09736  0.11384  0.731   0.3924    
-## treat5000 U       -0.81003  2.75778  0.086   0.7690    
-## treat10000 U      -2.73830  2.37179  1.333   0.2483    
-## age                0.01421  0.07792  0.033   0.8553    
-## sexFemale          2.49409  2.11723  1.388   0.2388    
-## week:treat5000 U   0.11491  0.13316  0.745   0.3882    
-## week:treat10000 U  0.32301  0.14593  4.899   0.0269 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Correlation structure = exchangeable 
-## Estimated Scale Parameters:
-## 
-##             Estimate Std.err
-## (Intercept)    157.9   15.02
-##   Link = identity 
-## 
-## Estimated Correlation Parameters:
-##       Estimate Std.err
-## alpha   0.6792 0.03987
-## Number of clusters:   109  Maximum cluster size: 6
-\end{verbatim}
-
 A GEE model with Gaussian family, identity link, and an exchangeable
 correlation structure. The mean model included week, treatment,
 treatment-by-week interaction, and baseline age and sex, with Placebo as
 the reference treatment group.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-11-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-10-1.pdf}}
 
 Figure 4 shows Pearson residuals plotted against the fitted TWSTRS
 values with points colored by treatment group. The residuals are
@@ -447,7 +415,7 @@ robust standard errors, the uncertainty in the regression coefficients
 is driven by the observed variability of the residuals within subjects,
 rather than depending on the working variance and correlation.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-12-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-11-1.pdf}}
 
 Figure 5 shows mean TWSTRS over time by treatment group. All groups show
 decreases from baseline through weeks 2--4, suggesting early
@@ -456,7 +424,7 @@ active treatment groups begin to show higher TWSTRS scores than the
 placebo group.
 
 \begin{longtable}[]{@{}lrrrr@{}}
-\caption{Table 4. GEE Model Summary}\tabularnewline
+\caption{GEE Model Summary}\tabularnewline
 \toprule\noalign{}
 term & estimate & std.error & statistic & p.value \\
 \midrule\noalign{}
@@ -467,12 +435,12 @@ term & estimate & std.error & statistic & p.value \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-(Intercept) & 38.698 & 4.760 & 66.095 & 0.000 \\
+(Intercept) & 41.192 & 4.612 & 79.769 & 0.000 \\
 week & 0.097 & 0.114 & 0.731 & 0.392 \\
 treat5000 U & -0.810 & 2.758 & 0.086 & 0.769 \\
 treat10000 U & -2.738 & 2.372 & 1.333 & 0.248 \\
 age & 0.014 & 0.078 & 0.033 & 0.855 \\
-sexFemale & 2.494 & 2.117 & 1.388 & 0.239 \\
+sexMale & -2.494 & 2.117 & 1.388 & 0.239 \\
 week:treat5000 U & 0.115 & 0.133 & 0.745 & 0.388 \\
 week:treat10000 U & 0.323 & 0.146 & 4.899 & 0.027 \\
 \end{longtable}

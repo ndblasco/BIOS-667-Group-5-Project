@@ -11,6 +11,8 @@ output:
   pdf_document:
     latex_engine: xelatex
     keep_tex: true
+bibliography: citations.bib
+csl: apa.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -51,7 +53,7 @@ cdystonia <- cdystonia %>% dplyr::mutate(
       sex == 1 ~ "Female",
       sex == 2 ~ "Male")
     ,
-    sex = factor(sex, levels = c("Male", "Female")),
+    sex = factor(sex, levels = c("Female", "Male")), # want female as reference group
     site = factor(site, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9"))) 
 ```
 
@@ -251,7 +253,7 @@ data_gee <- cdystonia %>% mutate(
 
 # Set reference levels
 data_gee$treat <- relevel(data_gee$treat, ref = "Placebo")
-data_gee$sex <- relevel(data_gee$sex, ref = "Male")
+data_gee$sex <- relevel(data_gee$sex, ref = "Female") # want female as reference group
 
 gee_main <- geeglm(
   twstrs ~ week * treat + age + sex,  # mean model
@@ -260,19 +262,10 @@ gee_main <- geeglm(
   family = gaussian,                  # Gaussian working distribution (identity link)
   corstr = "exchangeable"             # working correlation structure
 )
-summary(gee_main)
+#summary(gee_main)
 ```
 
 A GEE model with Gaussian family, identity link, and an exchangeable correlation structure. The mean model included week, treatment, treatment-by-week interaction, and baseline age and sex, with Placebo as the reference treatment group.
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-#Create a new variable represent subject ID - combination of site and ID
-data_gee <- cdystonia %>% mutate(
-    treat = haven::as_factor(treat),
-    sex   = haven::as_factor(sex),
-    subj  = interaction(site, id, drop = TRUE)
-  )
-```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #Residuals
@@ -285,7 +278,7 @@ ggplot(data_gee2, aes(x = fitted, y = pearson, color = treat)) +
             inherit.aes = FALSE, fill = "grey95", alpha = 0.5) +
   geom_point(alpha = 0.6) +
   geom_hline(yintercept = 0, linetype = 2) +
-  labs(y = "Pearson residual", x = "Fitted rate", title = "Figure 4. GEE Count Model Residuals") +
+  labs(y = "Pearson residual", x = "Fitted", title = "Figure 4. GEE Model Residuals") +
   theme_minimal()
 ```
 
@@ -318,7 +311,7 @@ Figure 5 shows mean TWSTRS over time by treatment group. All groups show decreas
 
 ```{r  echo=FALSE, message=FALSE, warning=FALSE}
 tidy(gee_main, effects = "fixed") %>%
-  kable(digits = 3, caption = "Table 4. GEE Model Summary")
+  kable(digits = 3, caption = "GEE Model Summary")
 ```
 
 Table 4 summarizes the GEE estimates for TWSTRS over time by treatment, adjusted for age and sex. The main effects for treat5000U (−0.810, p = 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at week 0 with placebo. Both estimates are negative but not statistically significant, indicating no clear baseline differences in mean TWSTRS between treatment groups and placebo. The treatment-by-week interaction terms describe how each treatment's trajectory differs from placebo over time. For 5000U, the additional slope relative to placebo is small and not significant (0.115, p = 0.388), suggesting that its average linear trend over time is similar to placebo. For 10000U, the additional slope is larger and statistically significant (0.323, p = 0.027), indicating an average increase in TWSTRS over 16 weeks compared with placebo. Because higher TWSTRS scores reflect worse symptoms, these results imply that low-dose regimen behaves similarly to placebo, while the high-dose regimen is associated with faster worsening over time. Overall, the GEE model provides a reasonable approach for assessing whether treatment affects population-average TWSTRS trajectories over time, while recognizing that the true time course is somewhat non-linear and that estimated treatment effects are relatively small.
