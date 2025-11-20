@@ -53,7 +53,7 @@ cdystonia <- cdystonia %>% dplyr::mutate(
       sex == 1 ~ "Female",
       sex == 2 ~ "Male")
     ,
-    sex = factor(sex, levels = c("Female", "Male")), # want female as reference group
+    sex = factor(sex, levels = c("Male", "Female")), # want male as reference group
     site = factor(site, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9"))) 
 ```
 
@@ -251,7 +251,7 @@ data_gee <- cdystonia %>% mutate(
 
 # Set reference levels
 data_gee$treat <- relevel(data_gee$treat, ref = "Placebo")
-data_gee$sex <- relevel(data_gee$sex, ref = "Female") # want female as reference group
+data_gee$sex <- relevel(data_gee$sex, ref = "Male") # want male as reference group
 
 gee_main <- geeglm(
   twstrs ~ week * treat + age + sex,  # mean model
