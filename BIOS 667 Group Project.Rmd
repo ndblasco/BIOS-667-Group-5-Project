@@ -13,6 +13,7 @@ output:
     keep_tex: true
 bibliography: citations.bib
 csl: apa.csl
+geometry: margin=1in
 ---
 
 ```{r setup, include=FALSE}
@@ -40,7 +41,7 @@ library(geepack) # for fitting GEE models
 cdystonia <- read_dta("Data/cdystonia.dta") # mapping to Data folder in GitHub repo
 
 # Inspect data
-head(cdystonia)
+#head(cdystonia)
 
 cdystonia <- cdystonia %>% dplyr::mutate(
     treat = dplyr::case_when(
@@ -82,10 +83,9 @@ tbl <- cdystonia_wk0 |>
       "BotB = botulinum toxin type B; TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale.",
     abbreviation = FALSE
   ) |>
-  modify_spanning_header(c(stat_2,stat_3)~"**BotB**")
+  modify_spanning_header(c(stat_2,stat_3)~"**BotB**") 
 
-#show_header_names(tbl)
-
+tbl$table_body$label[tbl$table_body$label == "No. obs."] <- "N"
 # making a wide dataset
 cdystonia_wide <- cdystonia %>%
   pivot_wider(
@@ -117,11 +117,12 @@ tbl2 <-
     twstrs_12 = "**Week 12**",
     twstrs_16 = "**Week 16**"
   ) %>%
-  
-  # 3. Convert to gt and apply final formatting
-  as_gt() %>%
-  gt::tab_header(title="Listing 1. TWSTRS scores for 109 patients with CD at weeks 2,4,8,12,16") %>%
-  gt::opt_row_striping()
+    as_kable_extra(
+    booktabs = TRUE,
+    longtable = TRUE,
+    linesep = "",
+    caption = "TWSTRS scores for 109 patients with CD at weeks 2, 4, 8, 12, 16"
+  )
 ```
 
 ## Introduction
@@ -136,24 +137,26 @@ Inclusion and exclusion criteria for the trial were not available. Duration of C
 
 ### *Statistical Analyses*
 
-Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable and blank, blank, blank as covariates.
+Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable. For GLM, age, sex, site, week, and treatment were used as covariates with male and placebo being the reference groups. For the GEE model, week, age,sex, treatment, and treatment $\times$ week interaction were included in the model again with male and placebo being the reference groups. 
 
 ## Results
 
 ```{r,echo=FALSE}
+tbl2
+```
+
+```{r,echo=FALSE}
+#| label: preliminary tables
+
 # adding Table 1
-as_kable_extra(tbl,
+tbl1<-as_kable_extra(tbl,
                booktabs=TRUE,
                longtable=TRUE,
                linesep="",
                caption = "Summary of Demographic and Baseline Characteristics",
-                table.envir = "table",
-               table.attr = "position='h!'")
+                table.envir = "table")
 
-# adding Table 2
-# tbl2
-
-# someone help position these. table 1 should come before table 2
+tbl1
 ```
 
 ### Generalized Linear Model (GLM)
