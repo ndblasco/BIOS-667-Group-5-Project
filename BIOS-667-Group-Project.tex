@@ -394,6 +394,109 @@ repeated measures. The following GEE and GLMM analyses address this
 limitation by explicitly modeling within-subject correlation and random
 effects.
 
+\subsubsection{Generalized Estimating Equation
+(GEE)}\label{generalized-estimating-equation-gee}
+
+\begin{verbatim}
+## 
+## Call:
+## geeglm(formula = twstrs ~ week * treat + age + sex, family = gaussian, 
+##     data = data_gee, id = subj, corstr = "exchangeable")
+## 
+##  Coefficients:
+##                   Estimate  Std.err   Wald Pr(>|W|)    
+## (Intercept)       38.69832  4.76001 66.095 4.44e-16 ***
+## week               0.09736  0.11384  0.731   0.3924    
+## treat5000 U       -0.81003  2.75778  0.086   0.7690    
+## treat10000 U      -2.73830  2.37179  1.333   0.2483    
+## age                0.01421  0.07792  0.033   0.8553    
+## sexFemale          2.49409  2.11723  1.388   0.2388    
+## week:treat5000 U   0.11491  0.13316  0.745   0.3882    
+## week:treat10000 U  0.32301  0.14593  4.899   0.0269 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation structure = exchangeable 
+## Estimated Scale Parameters:
+## 
+##             Estimate Std.err
+## (Intercept)    157.9   15.02
+##   Link = identity 
+## 
+## Estimated Correlation Parameters:
+##       Estimate Std.err
+## alpha   0.6792 0.03987
+## Number of clusters:   109  Maximum cluster size: 6
+\end{verbatim}
+
+A GEE model with Gaussian family, identity link, and an exchangeable
+correlation structure. The mean model included week, treatment,
+treatment-by-week interaction, and baseline age and sex, with Placebo as
+the reference treatment group.
+
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-11-1.pdf}}
+
+Figure 4 shows Pearson residuals plotted against the fitted TWSTRS
+values with points colored by treatment group. The residuals are
+centered around zero and do not show a strong funnel shape, supporting
+the constant-variance assumption. However, many residuals fall outside
+\(\pm2\), indicating wide individual variation in TWSTRS trajectories
+and suggesting that the simple Gaussian working model does not fully
+capture the variance structure. Even so, because the GEE analysis used
+robust standard errors, the uncertainty in the regression coefficients
+is driven by the observed variability of the residuals within subjects,
+rather than depending on the working variance and correlation.
+
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-12-1.pdf}}
+
+Figure 5 shows mean TWSTRS over time by treatment group. All groups show
+decreases from baseline through weeks 2--4, suggesting early
+improvement, followed by increases after week 4. Around week 10, both
+active treatment groups begin to show higher TWSTRS scores than the
+placebo group.
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Table 4. GEE Model Summary}\tabularnewline
+\toprule\noalign{}
+term & estimate & std.error & statistic & p.value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+term & estimate & std.error & statistic & p.value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 38.698 & 4.760 & 66.095 & 0.000 \\
+week & 0.097 & 0.114 & 0.731 & 0.392 \\
+treat5000 U & -0.810 & 2.758 & 0.086 & 0.769 \\
+treat10000 U & -2.738 & 2.372 & 1.333 & 0.248 \\
+age & 0.014 & 0.078 & 0.033 & 0.855 \\
+sexFemale & 2.494 & 2.117 & 1.388 & 0.239 \\
+week:treat5000 U & 0.115 & 0.133 & 0.745 & 0.388 \\
+week:treat10000 U & 0.323 & 0.146 & 4.899 & 0.027 \\
+\end{longtable}
+
+Table 4 summarizes the GEE estimates for TWSTRS over time by treatment,
+adjusted for age and sex. The main effects for treat5000U (−0.810, p =
+0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at
+week 0 with placebo. Both estimates are negative but not statistically
+significant, indicating no clear baseline differences in mean TWSTRS
+between treatment groups and placebo. The treatment-by-week interaction
+terms describe how each treatment's trajectory differs from placebo over
+time. For 5000U, the additional slope relative to placebo is small and
+not significant (0.115, p = 0.388), suggesting that its average linear
+trend over time is similar to placebo. For 10000U, the additional slope
+is larger and statistically significant (0.323, p = 0.027), indicating
+an average increase in TWSTRS over 16 weeks compared with placebo.
+Because higher TWSTRS scores reflect worse symptoms, these results imply
+that low-dose regimen behaves similarly to placebo, while the high-dose
+regimen is associated with faster worsening over time. Overall, the GEE
+model provides a reasonable approach for assessing whether treatment
+affects population-average TWSTRS trajectories over time, while
+recognizing that the true time course is somewhat non-linear and that
+estimated treatment effects are relatively small.
+
 \subsection{Discussion}\label{discussion}
 
 Summarization of main points, conclusions based in results Summarization

@@ -30,6 +30,8 @@ library(kableExtra)
 library(huxtable) # for styling tables
 library(gtreg) # for making tables
 library(knitr) # for tidying output
+library(ggplot2) # for plotting
+library(geepack) # for fitting GEE models
 })
 
 # Read in data
@@ -236,6 +238,91 @@ kable(tidy(glm(twstrs ~ week + treat + age + sex + site,
 Excluding influential observations resulted in modest shifts in the parameter estimates and slightly improved precision. Notably, the effect of week remained statistically significant and variation across study sites continued to be pronounced. This underscores that site-level differences remain important even after removing influential observation.s
 
 Overall, excluding influential points slightly adjusted the estimates and improved precision, but the main patterns of association were consistent with the original GLM. As with the previous model, the GLM assumptions are not appropriate for longitudinal data with correlated repeated measures. The following GEE and GLMM analyses address this limitation by explicitly modeling within-subject correlation and random effects.
+
+### Generalized Estimating Equation (GEE)
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#Create a new variable represent subject ID - combination of site and ID
+data_gee <- cdystonia %>% mutate(
+    treat = haven::as_factor(treat),
+    sex   = haven::as_factor(sex),
+    subj  = interaction(site, id, drop = TRUE)
+  )
+
+# Set reference levels
+data_gee$treat <- relevel(data_gee$treat, ref = "Placebo")
+data_gee$sex <- relevel(data_gee$sex, ref = "Male")
+
+gee_main <- geeglm(
+  twstrs ~ week * treat + age + sex,  # mean model
+  id     = subj,                      # cluster = subject
+  data   = data_gee,
+  family = gaussian,                  # Gaussian working distribution (identity link)
+  corstr = "exchangeable"             # working correlation structure
+)
+summary(gee_main)
+```
+
+A GEE model with Gaussian family, identity link, and an exchangeable correlation structure. The mean model included week, treatment, treatment-by-week interaction, and baseline age and sex, with Placebo as the reference treatment group.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#Create a new variable represent subject ID - combination of site and ID
+data_gee <- cdystonia %>% mutate(
+    treat = haven::as_factor(treat),
+    sex   = haven::as_factor(sex),
+    subj  = interaction(site, id, drop = TRUE)
+  )
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#Residuals
+data_gee2 <- data_gee |> mutate(
+  pearson = residuals(gee_main, type = "pearson"),
+  fitted = predict(gee_main, type = "response")
+) 
+ggplot(data_gee2, aes(x = fitted, y = pearson, color = treat)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -2, ymax = 2),
+            inherit.aes = FALSE, fill = "grey95", alpha = 0.5) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  labs(y = "Pearson residual", x = "Fitted rate", title = "Figure 4. GEE Count Model Residuals") +
+  theme_minimal()
+```
+
+Figure 4 shows Pearson residuals plotted against the fitted TWSTRS values with points colored by treatment group. The residuals are centered around zero and do not show a strong funnel shape, supporting the constant-variance assumption. However, many residuals fall outside $\pm2$, indicating wide individual variation in TWSTRS trajectories and suggesting that the simple Gaussian working model does not fully capture the variance structure. Even so, because the GEE analysis used robust standard errors, the uncertainty in the regression coefficients is driven by the observed variability of the residuals within subjects, rather than depending on the working variance and correlation.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+mean_profile <- data_gee %>%
+  group_by(treat, week) %>%
+  summarise(
+    mean_twstrs = mean(twstrs, na.rm = TRUE),
+    sd_twstrs   = sd(twstrs, na.rm = TRUE),
+    n           = n(),
+    se_twstrs   = sd_twstrs / sqrt(n),
+    .groups     = "drop"
+  )
+
+ggplot(mean_profile, aes(x = week, y = mean_twstrs, colour = treat)) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  labs(
+    title = "Figure 5. Mean TWSTRS Over Time by Treatment",
+    x     = "Week",
+    y     = "Mean TWSTRS (± SE)",
+    colour = "Treatment"
+  )
+```
+
+Figure 5 shows mean TWSTRS over time by treatment group. All groups show decreases from baseline through weeks 2–4, suggesting early improvement, followed by increases after week 4. Around week 10, both active treatment groups begin to show higher TWSTRS scores than the placebo group.
+
+```{r  echo=FALSE, message=FALSE, warning=FALSE}
+tidy(gee_main, effects = "fixed") %>%
+  kable(digits = 3, caption = "Table 4. GEE Model Summary")
+```
+
+Table 4 summarizes the GEE estimates for TWSTRS over time by treatment, adjusted for age and sex. The main effects for treat5000U (−0.810, p = 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at week 0 with placebo. Both estimates are negative but not statistically significant, indicating no clear baseline differences in mean TWSTRS between treatment groups and placebo. The treatment-by-week interaction terms describe how each treatment's trajectory differs from placebo over time. For 5000U, the additional slope relative to placebo is small and not significant (0.115, p = 0.388), suggesting that its average linear trend over time is similar to placebo. For 10000U, the additional slope is larger and statistically significant (0.323, p = 0.027), indicating an average increase in TWSTRS over 16 weeks compared with placebo. Because higher TWSTRS scores reflect worse symptoms, these results imply that low-dose regimen behaves similarly to placebo, while the high-dose regimen is associated with faster worsening over time. Overall, the GEE model provides a reasonable approach for assessing whether treatment affects population-average TWSTRS trajectories over time, while recognizing that the true time course is somewhat non-linear and that estimated treatment effects are relatively small.
+
 
 ## Discussion
 
