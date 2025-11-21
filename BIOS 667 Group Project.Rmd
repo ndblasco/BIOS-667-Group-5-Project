@@ -456,7 +456,7 @@ p3
 
 # 3. Convergence Checks
 
-print(glmm_fit@optinfo$conv)
+#print(glmm_fit@optinfo$conv)
 
 ```
 
