@@ -159,7 +159,7 @@ tbl1<-as_kable_extra(tbl,
                longtable=TRUE,
                linesep="",
                caption = "Summary of Demographic and Baseline Characteristics",
-                table.envir = "table")
+               table.envir = "table")
 
 tbl1
 ```
@@ -320,7 +320,7 @@ tidy(gee_main, effects = "fixed") %>%
   kable(digits = 3, caption = "GEE Model Summary")
 ```
 
-Table 4 summarizes the GEE estimates for TWSTRS over time by treatment, adjusted for age and sex. The main effects for treat5000U (−0.810, p = 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at week 0 with placebo. Both estimates are negative but not statistically significant, indicating no clear baseline differences in mean TWSTRS between treatment groups and placebo. The treatment-by-week interaction terms describe how each treatment's trajectory differs from placebo over time. For 5000U, the additional slope relative to placebo is small and not significant (0.115, p = 0.388), suggesting that its average linear trend over time is similar to placebo. For 10000U, the additional slope is larger and statistically significant (0.323, p = 0.027), indicating an average increase in TWSTRS over 16 weeks compared with placebo. Because higher TWSTRS scores reflect worse symptoms, these results imply that low-dose regimen behaves similarly to placebo, while the high-dose regimen is associated with faster worsening over time. Overall, the GEE model provides a reasonable approach for assessing whether treatment affects population-average TWSTRS trajectories over time, while recognizing that the true time course is somewhat non-linear and that estimated treatment effects are relatively small.
+Table 5 summarizes the GEE estimates for TWSTRS over time by treatment, adjusted for age and sex. The main effects for treat5000U (−0.810, p = 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at week 0 with placebo. Both estimates are negative but not statistically significant, indicating no clear baseline differences in mean TWSTRS between treatment groups and placebo. The treatment-by-week interaction terms describe how each treatment's trajectory differs from placebo over time. For 5000U, the additional slope relative to placebo is small and not significant (0.115, p = 0.388), suggesting that its average linear trend over time is similar to placebo. For 10000U, the additional slope is larger and statistically significant (0.323, p = 0.027), indicating an average increase in TWSTRS over 16 weeks compared with placebo. Because higher TWSTRS scores reflect worse symptoms, these results imply that low-dose regimen behaves similarly to placebo, while the high-dose regimen is associated with faster worsening over time. Overall, the GEE model provides a reasonable approach for assessing whether treatment affects population-average TWSTRS trajectories over time, while recognizing that the true time course is somewhat non-linear and that estimated treatment effects are relatively small.
 
 ### Generalized Linear Mixed Effects Model (GLMM) 
 
@@ -343,12 +343,12 @@ cdystonia_glmm$sex <- relevel(cdystonia_glmm$sex, ref = "Male")
 glmm_fit <- lmer(twstrs ~ treat*week + age + sex + (1 | subj), 
                  data = cdystonia_glmm)
 broom.mixed::tidy(glmm_fit, effects = "fixed", conf.int = TRUE) %>%
-  kable(digits = 3, caption = "Table 5. GLMM Model Summary")
+  kable(digits = 3, caption = "GLMM Model Summary")
 ```
 
-Table 5 presents the fixed effect estimates from the linear mixed model. Consistent with the previous GEE analysis, the point estimates for the fixed effects are identical, as expected for a linear model with a Gaussian distribution. However, the standard errors and p-values differ slightly reflecting the distinction between model-based (GLMM) and robust (GEE) variance estimation.
+Table 6 presents the fixed effect estimates from the linear mixed model. Consistent with the previous GEE analysis, the point estimates for the fixed effects are identical, as expected for a linear model with a Gaussian distribution. However, the standard errors and p-values differ slightly reflecting the distinction between model-based (GLMM) and robust (GEE) variance estimation.
 
-At baseline, there were no statistically significant differences in disease severity between the treatment arms and the placebo group. Neither age or sex are significant predictors for TWSTRS. The primary finding is the significant interaction between the 10000 U treatment and week ($\beta = 0.323, SE = 0.125, p = 0.010$). This confirms that, conditional on the individual patient, the high-dose group experienced a significantly faster rate of worsening, increasing by approximately 0.32 points per week relative to the placebo group.
+At baseline, there were no statistically significant differences in disease severity between the treatment arms and the placebo group. Neither age nor sex are significant predictors for TWSTRS. The primary finding is the significant interaction between the 10000 U treatment and week ($\beta = 0.323, SE = 0.125, p = 0.010$). This confirms that, conditional on the individual patient, the high-dose group experienced a significantly faster rate of worsening, increasing by approximately 0.32 points per week relative to the placebo group.
 
 ```{r, message=FALSE}
 # Compare the random intercept model to the random slope model
@@ -357,7 +357,7 @@ glmm_fit2 <- lmer(twstrs ~ treat*week + age + sex + (1 + week | subj),
 #broom.mixed::tidy(glmm_fit2, effects = "fixed", conf.int = TRUE)
 anova(glmm_fit, glmm_fit2)
 ```
-The anova analysis shows that random slope model is not better than the random intercept model.
+The ANOVA analysis shows that random slope model is not better than the random intercept model.
 
 ```{r}
 # Calculate predicted TWSTRS scores at different week
@@ -471,7 +471,9 @@ We also confirm that the model converged successfully.
 
 ## Discussion
 
-Summarization of main points, conclusions based in results Summarization of the various models applied, which ones you prefer and base your interpretations off of and why Discussion of limitations if any
+Summarization of main points, conclusions based in results 
+Summarization of the various models applied, which ones you prefer and base your interpretations off of and why 
+Discussion of limitations if any
 
 ## References
 

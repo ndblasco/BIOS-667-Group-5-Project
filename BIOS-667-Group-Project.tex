@@ -112,6 +112,14 @@
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{hhline}
+\usepackage{calc}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{hyperref}
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
@@ -380,7 +388,7 @@ week:treat5000 U & 0.115 & 0.133 & 0.745 & 0.388 \\
 week:treat10000 U & 0.323 & 0.146 & 4.899 & 0.027 \\
 \end{longtable}
 
-Table 4 summarizes the GEE estimates for TWSTRS over time by treatment,
+Table 5 summarizes the GEE estimates for TWSTRS over time by treatment,
 adjusted for age and sex. The main effects for treat5000U (−0.810, p =
 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at
 week 0 with placebo. Both estimates are negative but not statistically
@@ -399,6 +407,268 @@ model provides a reasonable approach for assessing whether treatment
 affects population-average TWSTRS trajectories over time, while
 recognizing that the true time course is somewhat non-linear and that
 estimated treatment effects are relatively small.
+
+\subsubsection{Generalized Linear Mixed Effects Model
+(GLMM)}\label{generalized-linear-mixed-effects-model-glmm}
+
+While the GEE model provides population-averaged estimates, we
+implemented a Generalized Linear Mixed Model (GLMM) to model
+subject-specific heterogeneity. By including a random intercept, the
+GLMM partitions the total variance into between-subject and
+within-subject components, allowing us to estimate treatment
+trajectories conditional on an individual patient's unique baseline
+severity. Additionally, because GLMM uses likelihood-based estimation,
+they provide valid inference under the Missing at Random (MAR)
+assumption.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0787}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.2022}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1011}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1124}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1124}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0899}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0899}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1011}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1124}}@{}}
+\caption{GLMM Model Summary}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+effect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+std.error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p.value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+conf.low
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+conf.high
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+effect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+std.error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p.value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+conf.low
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+conf.high
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+fixed & (Intercept) & 38.698 & 5.248 & 7.373 & 107.898 & 0.000 & 28.295
+& 49.101 \\
+fixed & treat5000 U & -0.810 & 2.748 & -0.295 & 128.543 & 0.769 & -6.246
+& 4.627 \\
+fixed & treat10000 U & -2.738 & 2.738 & -1.000 & 128.049 & 0.319 &
+-8.155 & 2.679 \\
+fixed & week & 0.097 & 0.089 & 1.089 & 522.247 & 0.277 & -0.078 &
+0.273 \\
+fixed & age & 0.014 & 0.088 & 0.162 & 104.208 & 0.871 & -0.159 &
+0.188 \\
+fixed & sexFemale & 2.495 & 2.216 & 1.126 & 104.884 & 0.263 & -1.898 &
+6.888 \\
+fixed & treat5000 U:week & 0.115 & 0.125 & 0.916 & 521.089 & 0.360 &
+-0.132 & 0.361 \\
+fixed & treat10000 U:week & 0.323 & 0.125 & 2.582 & 521.609 & 0.010 &
+0.077 & 0.569 \\
+\end{longtable}
+
+Table 6 presents the fixed effect estimates from the linear mixed model.
+Consistent with the previous GEE analysis, the point estimates for the
+fixed effects are identical, as expected for a linear model with a
+Gaussian distribution. However, the standard errors and p-values differ
+slightly reflecting the distinction between model-based (GLMM) and
+robust (GEE) variance estimation.
+
+At baseline, there were no statistically significant differences in
+disease severity between the treatment arms and the placebo group.
+Neither age nor sex are significant predictors for TWSTRS. The primary
+finding is the significant interaction between the 10000 U treatment and
+week (\(\beta = 0.323, SE = 0.125, p = 0.010\)). This confirms that,
+conditional on the individual patient, the high-dose group experienced a
+significantly faster rate of worsening, increasing by approximately 0.32
+points per week relative to the placebo group.
+
+ 
+  \providecommand{\huxb}[2]{\arrayrulecolor[RGB]{#1}\global\arrayrulewidth=#2pt}
+  \providecommand{\huxvb}[2]{\color[RGB]{#1}\vrule width #2pt}
+  \providecommand{\huxtpad}[1]{\rule{0pt}{#1}}
+  \providecommand{\huxbpad}[1]{\rule[-#1]{0pt}{#1}}
+
+\begin{table}[ht]
+\begin{centerbox}
+\begin{threeparttable}
+ \setlength{\tabcolsep}{0pt}
+\begin{tabular}{l l l l l l l l}
+
+
+\hhline{>{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}-}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0.4}}r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \textbf{npar} \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \textbf{AIC} \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \textbf{BIC} \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \textbf{logLik} \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \textbf{-2*log(L)} \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \textbf{Chisq} \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \textbf{Df} \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0.4}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \textbf{Pr($>$Chisq)} \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}-}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0.4}}r!{\huxvb{0, 0, 0}{0}}}{\cellcolor[RGB]{242, 242, 242}\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 10 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\cellcolor[RGB]{242, 242, 242}\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 4.57e+03 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\cellcolor[RGB]{242, 242, 242}\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 4.62e+03 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\cellcolor[RGB]{242, 242, 242}\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} -2.28e+03 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\cellcolor[RGB]{242, 242, 242}\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 4.55e+03 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\cellcolor[RGB]{242, 242, 242}\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \hphantom{0}\hphantom{0}\hphantom{0} \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\cellcolor[RGB]{242, 242, 242}\huxtpad{6pt + 1em}\raggedleft \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0.4}}}{\cellcolor[RGB]{242, 242, 242}\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} \hphantom{0}\hphantom{0}\hphantom{0}\hphantom{0} \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{0, 0, 0}{0.4}}|>{\huxb{0, 0, 0}{0.4}}|}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0.4}}r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 12 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 4.58e+03 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 4.63e+03 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} -2.28e+03 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 4.55e+03 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 1.51 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 2 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0.4}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 0.471 \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}-}
+\arrayrulecolor{black}
+\end{tabular}
+\end{threeparttable}\par\end{centerbox}
+
+\end{table}
+ 
+
+The ANOVA analysis shows that random slope model is not better than the
+random intercept model.
+
+\begin{verbatim}
+## week =  0:
+##  treat   emmean   SE  df lower.CL upper.CL
+##  Placebo   40.7 1.95 129     36.9     44.6
+##  5000 U    39.9 1.93 128     36.1     43.7
+##  10000 U   38.0 1.98 126     34.1     41.9
+## 
+## week =  2:
+##  treat   emmean   SE  df lower.CL upper.CL
+##  Placebo   40.9 1.90 116     37.2     44.7
+##  5000 U    40.3 1.88 116     36.6     44.1
+##  10000 U   38.8 1.94 115     35.0     42.7
+## 
+## week =  4:
+##  treat   emmean   SE  df lower.CL upper.CL
+##  Placebo   41.1 1.86 109     37.4     44.8
+##  5000 U    40.8 1.85 108     37.1     44.4
+##  10000 U   39.7 1.91 108     35.9     43.5
+## 
+## week =  8:
+##  treat   emmean   SE  df lower.CL upper.CL
+##  Placebo   41.5 1.85 105     37.8     45.2
+##  5000 U    41.6 1.83 104     38.0     45.3
+##  10000 U   41.4 1.89 105     37.6     45.1
+## 
+## week = 12:
+##  treat   emmean   SE  df lower.CL upper.CL
+##  Placebo   41.9 1.90 118     38.1     45.7
+##  5000 U    42.5 1.88 116     38.7     46.2
+##  10000 U   43.0 1.94 116     39.2     46.9
+## 
+## week = 16:
+##  treat   emmean   SE  df lower.CL upper.CL
+##  Placebo   42.3 2.02 148     38.3     46.3
+##  5000 U    43.3 1.99 145     39.4     47.3
+##  10000 U   44.7 2.05 144     40.7     48.8
+## 
+## Results are averaged over the levels of: sex 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-17-1.pdf}}
+Figure 6 illustrates the model-predicted trajectories for TWSTRS across
+the three treatment groups. The blue line representing 10000 U treatment
+and the red line for placebo cross each other, showing the significant
+interaction term between 10000 U and week. The relationship between
+treatment and score depends on time.
+
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-18-1.pdf}}
+
+Figure 7 displays the observed TWSTRS scores (points) overlaying the
+GLMM fitted trajectories (lines) for a random sample of 12 subjects. The
+heterogeneity at baseline confirms the necessity of including a random
+intercept for each subject to account for patient-specific
+heterogeneity, suggesting that much of the variance arises from
+pre-existing differences between patients.
+
+The relationship between the solid lines and scattered points
+demonstrates how the model generates Best Linear Unbiased Predictions
+(BLUPs) for each subject. Instead of overfitting to the noisy
+week-to-week fluctuations observed in the raw data points, the model
+fits smooth linear trajectories that balance individual trends with the
+overall population average.
+
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-19-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-19-2.pdf}}
+
+\begin{verbatim}
+## $opt
+## [1] 0
+## 
+## $lme4
+## list()
+\end{verbatim}
+
+The plot of Pearson residuals against fitted values (Figure 8) shows a
+random scatter of points around the zero line without a distinct funnel
+shape. This indicates that the assumption of constant variance
+(homoscedasticity) is reasonably satisfied, and the linear mean
+structure is adequate. The plot of residuals against time (Figure 9)
+displays a slight non-linear trend. The dip suggests that the model is
+overpredicting the TWSTRS scores around Weeks 4 and 5. However, the
+residuals generally remain centered near zero, indicating the linear
+approximation is adequate for the primary analysis.
+
+The Q-Q plot for the random intercepts (Figure 10) assesses the
+assumption that subject-specific deviations follow a normal
+distribution. The points fall closely along the red diagonal reference
+line, with only negligible deviations at the extreme tails. This
+confirms that the assumption of normally distributed random effects is
+well satisfied.
+
+We also confirm that the model converged successfully.
 
 \subsection{Discussion}\label{discussion}
 
