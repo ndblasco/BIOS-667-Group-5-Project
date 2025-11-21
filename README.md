@@ -14,7 +14,7 @@ This dataset in from Table 6.9 of Statistical Methods for the Analysis of Repeat
 
 **To read dta file into R:**  
 library(haven)  
-cdystonia <- read_dta("cdystonia.dta")  
+cdystonia <- read_dta("Data/cdystonia.dta")  
 cdystonia <- cdystonia %>% dplyr::mutate(
     treat = dplyr::case_when(
       treat == 1 ~ "10000 U",
