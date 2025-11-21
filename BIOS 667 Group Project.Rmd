@@ -144,6 +144,7 @@ Inclusion and exclusion criteria for the trial were not available. Duration of C
 
 Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable. For GLM, age, sex, site, week, and treatment were used as covariates with male and placebo being the reference groups. For the GEE model, week, age,sex, treatment, and treatment $\times$ week interaction were included in the model again with male and placebo being the reference groups. 
 
+\newpage
 ## Results
 
 ```{r,echo=FALSE}
@@ -164,6 +165,7 @@ tbl1<-as_kable_extra(tbl,
 tbl1
 ```
 
+\newpage
 ### Generalized Linear Model (GLM)
 
 A generalized linear model (GLM model) using a Gaussian link was fit including week, site, treatment, age, and sex as predictors (Table 2).
@@ -363,7 +365,7 @@ The ANOVA analysis shows that random slope model is not better than the random i
 # Calculate predicted TWSTRS scores at different week
 emm_results <- emmeans(glmm_fit, specs = ~ treat | week,
                        at = list(week = c(0, 2, 4, 8, 12, 16)))
-emm_results
+#emm_results
 
 # Plot the Estimated Marginal Means (Interaction Plot)
 emm_df <- as.data.frame(emm_results)

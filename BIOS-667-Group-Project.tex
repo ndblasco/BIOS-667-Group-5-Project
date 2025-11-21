@@ -132,7 +132,7 @@
 \title{BIOS 667 Group 5}
 \author{Lily Bai \and Nathalie Blasco \and Yihao Peng \and Lauren
 Rackley \and Sirui Wu}
-\date{2025-11-20}
+\date{2025-11-21}
 
 \begin{document}
 \maketitle
@@ -181,6 +181,8 @@ placebo being the reference groups. For the GEE model, week, age,sex,
 treatment, and treatment \(\times\) week interaction were included in
 the model again with male and placebo being the reference groups.
 
+\newpage
+
 \subsection{Results}\label{results}
 
 \begin{longtable}[t]{lllllllll}
@@ -222,6 +224,8 @@ TWSTRS total score at baseline &  &  &  &  & 0.3307\\
 \multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{1} BotB = botulinum toxin type B; TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale.}\\
 \multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{2} Pearson's Chi-squared test; Kruskal-Wallis rank sum test}\\
 \end{longtable}
+
+\newpage
 
 \subsubsection{Generalized Linear Model
 (GLM)}\label{generalized-linear-model-glm}
@@ -574,48 +578,6 @@ points per week relative to the placebo group.
 
 The ANOVA analysis shows that random slope model is not better than the
 random intercept model.
-
-\begin{verbatim}
-## week =  0:
-##  treat   emmean   SE  df lower.CL upper.CL
-##  Placebo   40.7 1.95 129     36.9     44.6
-##  5000 U    39.9 1.93 128     36.1     43.7
-##  10000 U   38.0 1.98 126     34.1     41.9
-## 
-## week =  2:
-##  treat   emmean   SE  df lower.CL upper.CL
-##  Placebo   40.9 1.90 116     37.2     44.7
-##  5000 U    40.3 1.88 116     36.6     44.1
-##  10000 U   38.8 1.94 115     35.0     42.7
-## 
-## week =  4:
-##  treat   emmean   SE  df lower.CL upper.CL
-##  Placebo   41.1 1.86 109     37.4     44.8
-##  5000 U    40.8 1.85 108     37.1     44.4
-##  10000 U   39.7 1.91 108     35.9     43.5
-## 
-## week =  8:
-##  treat   emmean   SE  df lower.CL upper.CL
-##  Placebo   41.5 1.85 105     37.8     45.2
-##  5000 U    41.6 1.83 104     38.0     45.3
-##  10000 U   41.4 1.89 105     37.6     45.1
-## 
-## week = 12:
-##  treat   emmean   SE  df lower.CL upper.CL
-##  Placebo   41.9 1.90 118     38.1     45.7
-##  5000 U    42.5 1.88 116     38.7     46.2
-##  10000 U   43.0 1.94 116     39.2     46.9
-## 
-## week = 16:
-##  treat   emmean   SE  df lower.CL upper.CL
-##  Placebo   42.3 2.02 148     38.3     46.3
-##  5000 U    43.3 1.99 145     39.4     47.3
-##  10000 U   44.7 2.05 144     40.7     48.8
-## 
-## Results are averaged over the levels of: sex 
-## Degrees-of-freedom method: kenward-roger 
-## Confidence level used: 0.95
-\end{verbatim}
 
 \pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/unnamed-chunk-17-1.pdf}}
 Figure 6 illustrates the model-predicted trajectories for TWSTRS across
