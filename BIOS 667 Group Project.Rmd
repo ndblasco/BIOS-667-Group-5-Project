@@ -471,8 +471,8 @@ We also confirm that the model converged successfully.
 
 ## Discussion
 
-Summarization of main points, conclusions based in results 
-Summarization of the various models applied, which ones you prefer and base your interpretations off of and why 
+Summarization of main points, conclusions based in results \
+Summarization of the various models applied, which ones you prefer and base your interpretations off of and why \
 Discussion of limitations if any
 
 ## References
