@@ -132,7 +132,7 @@
 \title{BIOS 667 Group 5}
 \author{Lily Bai \and Nathalie Blasco \and Yihao Peng \and Lauren
 Rackley \and Sirui Wu}
-\date{2025-11-26}
+\date{2025-11-27}
 
 \begin{document}
 \maketitle
@@ -178,14 +178,14 @@ Number of observations, mean, median, standard deviation (SD), minimum
 calculated for TWSTRS score at baseline. Frequencies and percentages
 were reported for categorical variables. GLM, GLMM, and GEE models were
 fit using TWSTRS total score as the response variable. For GLM, age,
-sex, site, week, and treatment were used as covariates with male and
-placebo being the reference groups. For the GEE and GLMM models, week,
-age, sex, treatment, and treatment \(\times\) week interaction were
-included in the model again with male and placebo being the reference
-groups. Both random slope and random intercept models were fit. ANOVA
-was used to compare the random slope and random intercept models. A
-Gaussian link function was used for all three model types. Statistical
-analyses were performed using R (version 4.4.2, R Core Team, 2024).
+sex, week, and treatment were used as covariates with male and placebo
+being the reference groups. For the GEE and GLMM models, week, age, sex,
+treatment, and treatment \(\times\) week interaction were included in
+the model again with male and placebo being the reference groups. Both
+random slope and random intercept models were fit. ANOVA was used to
+compare the random slope and random intercept models. A Gaussian link
+function was used for all three model types. Statistical analyses were
+performed using R (version 4.4.2, R Core Team, 2024).
 
 \newpage
 
@@ -237,7 +237,7 @@ TWSTRS total score at baseline &  &  &  &  & 0.3307\\
 (GLM)}\label{generalized-linear-model-glm}
 
 A generalized linear model (GLM model) using a Gaussian link was fit
-including week, site, treatment, age, and sex as predictors (Table 3).
+including week, treatment, age, and sex as predictors (Table 3).
 
 \begin{longtable}[]{@{}lrrrr@{}}
 \caption{GLM Model Summary (Gaussian Link)}\tabularnewline
@@ -263,7 +263,7 @@ The coefficient for week was statistically significant, indicating an
 overall linear trend in TWSTRS score over time. the coefficient for sex
 was also statistically significant, indicating a difference in TWSTRS
 score between females and males. Male is used as the reference group, so
-females have a TWSTRS score that is 2.18 points lower than males, on
+females have a TWSTRS score that is 2.18 points higher than males, on
 average holding everything else constant. However, because the GLM
 assumes independence of observations, the repeated measures within
 individuals violate this assumption. As a result, the standard errors
