@@ -136,7 +136,7 @@ The purpose of this project is to examine the effects of botulism toxin type B (
 
 ### *Study Population*
 
-Inclusion and exclusion criteria for the trial were not available. Duration of CD and age at onset were not known. The study included 109 patients (67 (61%)) females.The mean age was 56 (12) years. Median age was 56 years. The mean TWSTRS score at baseline was 46 (10). Demographic and baseline characteristics were similar among the three treatment groups (Table 2). It was not known if the patients received prior BotB treatments. Information about the randomization schedule was not provided.
+Inclusion and exclusion criteria for the trial were not available. Duration of CD and age at onset were not known. The study included 109 patients (67 (61%)) females. The mean age was 56 (12) years. Median age was 56 years. The mean TWSTRS score at baseline was 46 (10). Demographic and baseline characteristics were similar among the three treatment groups (Table 2). It was not known if the patients received prior BotB treatments. Information about the randomization schedule was not provided.
 
 ### *Statistical Analyses*
 
@@ -487,6 +487,8 @@ We also confirm that the model converged successfully.
 Summarization of main points, conclusions based in results \
 Summarization of the various models applied, which ones you prefer and base your interpretations off of and why \
 Discussion of limitations if any
+
+
 
 ## References
 
