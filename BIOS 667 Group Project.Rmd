@@ -140,7 +140,7 @@ Inclusion and exclusion criteria for the trial were not available. Duration of C
 
 ### *Statistical Analyses*
 
-Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable. For GLM, age, sex, site, week, and treatment were used as covariates with male and placebo being the reference groups. For the GEE and GLMM models, week, age, sex, treatment, and treatment $\times$ week interaction were included in the model again with male and placebo being the reference groups. Both random slope and random intercept models were fit. ANOVA was used to compare the random slope and random intercept models. A Gaussian link function was used for all three model types. Statistical analyses were performed using R (version 4.4.2, R Core Team, 2024).
+Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable. For GLM, age, sex, week, and treatment were used as covariates with male and placebo being the reference groups. For the GEE and GLMM models, week, age, sex, treatment, and treatment $\times$ week interaction were included in the model again with male and placebo being the reference groups. Both random slope and random intercept models were fit. ANOVA was used to compare the random slope and random intercept models. A Gaussian link function was used for all three model types. Statistical analyses were performed using R (version 4.4.2, R Core Team, 2024).
 
 \newpage
 ## Results
@@ -167,7 +167,7 @@ tbl1
 \newpage
 ### Generalized Linear Model (GLM)
 
-A generalized linear model (GLM model) using a Gaussian link was fit including week, site, treatment, age, and sex as predictors (Table 3).
+A generalized linear model (GLM model) using a Gaussian link was fit including week, treatment, age, and sex as predictors (Table 3).
 
 ```{r}
 #| label: glm-fit
