@@ -11,6 +11,7 @@ output:
   pdf_document:
     latex_engine: xelatex
     keep_tex: true
+    #toc: true
 bibliography: citations.bib
 csl: apa.csl
 geometry: margin=1in
