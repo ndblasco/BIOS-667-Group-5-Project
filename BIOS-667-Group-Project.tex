@@ -223,8 +223,9 @@ TWSTRS total score at baseline &  &  &  &  & 0.2911\\
 \subsubsection{Generalized Linear Model
 (GLM)}\label{generalized-linear-model-glm}
 
-A generalized linear model (GLM model) using a Gaussian link was fit
-including week, treatment, age, and sex as predictors (Table 2).
+A generalized linear model (GLM) with a Gaussian link was fit to
+evaluate the relationship between TWSTRS scores and age, sex, week,
+treatment group, and the week-by-treatment interaction.
 
 \begin{longtable}[]{@{}lrrrr@{}}
 \caption{GLM Model Summary (Gaussian Link)}\tabularnewline
@@ -238,25 +239,36 @@ term & estimate & std.error & statistic & p.value \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-(Intercept) & 37.673 & 2.582 & 14.588 & 0.000 \\
-week & 0.235 & 0.089 & 2.631 & 0.009 \\
-treat5000 U & 0.005 & 1.248 & 0.004 & 0.997 \\
-treat10000 U & -0.347 & 1.251 & -0.277 & 0.782 \\
-age & 0.017 & 0.042 & 0.396 & 0.692 \\
-sexFemale & 2.183 & 1.071 & 2.038 & 0.042 \\
+(Intercept) & 38.836 & 2.730 & 14.227 & 0.000 \\
+week & 0.067 & 0.156 & 0.429 & 0.668 \\
+treat5000 U & -0.844 & 1.977 & -0.427 & 0.670 \\
+treat10000 U & -2.929 & 1.962 & -1.493 & 0.136 \\
+age & 0.017 & 0.042 & 0.407 & 0.684 \\
+sexFemale & 2.147 & 1.070 & 2.006 & 0.045 \\
+week:treat5000 U & 0.122 & 0.220 & 0.555 & 0.579 \\
+week:treat10000 U & 0.374 & 0.219 & 1.708 & 0.088 \\
 \end{longtable}
 
-The coefficient for week was statistically significant, indicating an
-overall linear trend in TWSTRS score over time. the coefficient for sex
-was also statistically significant, indicating a difference in TWSTRS
-score between females and males. Male is used as the reference group, so
-females have a TWSTRS score that is 2.18 points higher than males, on
-average holding everything else constant. However, because the GLM
-assumes independence of observations, the repeated measures within
-individuals violate this assumption. As a result, the standard errors
-and p-values may be underestimated, and inference should be interpreted
-with caution. This motivates the subsequent use of correlation-aware
-models such as GEE and GLMM.
+The coefficient for sex was statistically significant, indicating a
+difference in TWSTRS score between females and males. Male is used as
+the reference group, so females have a TWSTRS score that is 2.18 points
+higher than males, on average holding everything else constant. Because
+a higher TWSTRS score indicates worse outcomes, this suggests that
+females exhibit worse symptom severity than males, which is consistent
+with the known epidemiology of cervical dystonia.
+
+The interaction coefficients between week and treatment were positive,
+meaning that treated groups tended to show greater increases in TWSTRS
+over time compared with the control group. Since increases represent
+worsening symptoms, this indicates a trend toward deterioration over
+time in the treatment groups, although the interaction effects did not
+reach statistical significance.
+
+Because the GLM assumes independence of observations, the repeated
+measures within individuals violate this assumption. As a result, the
+standard errors and p-values may be underestimated, and inference should
+be interpreted with caution. This motivates the subsequent use of
+correlation-aware models such as GEE and GLMM.
 
 \subsubsection{GLM Model Diagnostics}\label{glm-model-diagnostics}
 
@@ -277,11 +289,11 @@ indicates that the normality assumption is approximately satisfied.
 \pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/cooks-d-1.pdf}}
 
 Finally, figure 3 displays Cook's distance for all observations. The
-conventional threshold, 4/(n-k-1), where n is the number of observations
-and k is the number of predictors, was used to assess the influence of
-the observations. Several observations exceeded the threshold and were
-considered potentially influential and warranted further investigation.
-Therefore, a second GLM was fit, excluding those observations.
+conventional threshold, 4/n, where n is the number of observations, was
+used to assess the influence of the observations. Several observations
+exceeded the threshold and were considered potentially influential and
+warranted further investigation. Therefore, a second GLM was fit,
+excluding those observations.
 
 \begin{longtable}[]{@{}lrrrr@{}}
 \caption{GLM Model Summary (Excluding Influential
@@ -296,23 +308,27 @@ term & estimate & std.error & statistic & p.value \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-(Intercept) & 36.597 & 2.449 & 14.946 & 0.000 \\
-week & 0.276 & 0.084 & 3.284 & 0.001 \\
-treat5000 U & 0.178 & 1.182 & 0.151 & 0.880 \\
-treat10000 U & -1.159 & 1.160 & -1.000 & 0.318 \\
-age & 0.031 & 0.040 & 0.784 & 0.433 \\
-sexFemale & 3.217 & 1.008 & 3.193 & 0.001 \\
+(Intercept) & 37.233 & 2.562 & 14.534 & 0.000 \\
+week & 0.145 & 0.147 & 0.985 & 0.325 \\
+treat5000 U & -0.486 & 1.847 & -0.263 & 0.792 \\
+treat10000 U & -3.631 & 1.815 & -2.001 & 0.046 \\
+age & 0.038 & 0.039 & 0.957 & 0.339 \\
+sexFemale & 2.990 & 1.002 & 2.986 & 0.003 \\
+week:treat5000 U & 0.082 & 0.209 & 0.392 & 0.695 \\
+week:treat10000 U & 0.319 & 0.205 & 1.560 & 0.119 \\
 \end{longtable}
 
 Excluding influential observations resulted in modest shifts in the
 parameter estimates and slightly improved precision. Notably, the effect
-of week and sex remained statistically significant. Overall, excluding
-influential points slightly adjusted the estimates and improved
-precision, but the main patterns of association were consistent with the
-original GLM. As with the previous model, the GLM assumptions are not
-appropriate for longitudinal data with correlated repeated measures. The
-following GEE and GLMM analyses address this limitation by explicitly
-modeling within-subject correlation and random effects.
+of sex remained statistically significant. The treatment effect of
+10,000 U at baseline also became stronger and statistically significant
+while the interaction coeffecients shrunk closer to 0. Overall,
+excluding influential points slightly adjusted the estimates and
+improved precision, but the main patterns of association were consistent
+with the original GLM. As with the previous model, the GLM assumptions
+are not appropriate for longitudinal data with correlated repeated
+measures. The following GEE and GLMM analyses address this limitation by
+explicitly modeling within-subject correlation and random effects.
 
 \subsubsection{Generalized Estimating Equation
 (GEE)}\label{generalized-estimating-equation-gee}

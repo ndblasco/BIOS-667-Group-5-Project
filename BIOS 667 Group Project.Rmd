@@ -39,6 +39,7 @@ library(lmerTest)
 library(lme4)
 library(broom.mixed)
 library(patchwork) 
+library(car)
 })
 
 # Read in data
