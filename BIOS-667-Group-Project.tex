@@ -165,15 +165,18 @@ Number of observations, mean, median, standard deviation (SD), minimum
 (min) and maximum (max) were provided for age. Mean and SD were
 calculated for TWSTRS score at baseline. Frequencies and percentages
 were reported for categorical variables. GLM, GLMM, and GEE models were
-fit using TWSTRS total score as the response variable. For GLM, age,
-sex, week, and treatment were used as covariates with male and placebo
-being the reference groups. For the GEE and GLMM models, week, age, sex,
-treatment, and treatment \(\times\) week interaction were included in
-the model again with male and placebo being the reference groups. Both
-random slope and random intercept models were fit. ANOVA was used to
-compare the random slope and random intercept models. A Gaussian link
-function was used for all three model types. Statistical analyses were
-performed using R (version 4.5.2, R Core Team, 2025).
+fit using TWSTRS total score as the response variable. Prior to fitting
+models, sex and treatment group were converted to factor variables in R.
+Before fitting GEE and GLMM, a unique subject ID variable was created by
+combining site and ID. For GLM, age, sex, week, and treatment were used
+as covariates with male and placebo being the reference groups. For all
+three models, week, age, sex, treatment, and treatment \(\times\) week
+interaction were included in the model again with male and placebo being
+the reference groups. Both random slope and random intercept models were
+fit. ANOVA was used to compare the random slope and random intercept
+models. A Gaussian link function was used for all three model types.
+Statistical analyses were performed using R (version 4.5.2, R Core Team,
+2025).
 
 \subsection{Results}\label{results}
 
