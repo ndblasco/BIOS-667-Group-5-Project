@@ -126,19 +126,23 @@ tbl1
 
 ### Generalized Linear Model (GLM)
 
-A generalized linear model (GLM model) using a Gaussian link was fit including week, treatment, age, and sex as predictors (Table 2).
+A generalized linear model (GLM) with a Gaussian link was fit to evaluate the relationship between TWSTRS scores and age, sex, week, treatment group, and the week-by-treatment interaction.
 
 ```{r}
 #| label: glm-fit
 # Fit a GLM
-glm_fit <- glm(twstrs ~ week + treat + age + sex,
+glm_fit <- glm(twstrs ~ week * treat + age + sex,
                data = cdystonia,
                family = gaussian) 
 
 kable(tidy(glm_fit), digits=3, caption = "GLM Model Summary (Gaussian Link)")
 ```
 
-The coefficient for week was statistically significant, indicating an overall linear trend in TWSTRS score over time. the coefficient for sex was also statistically significant, indicating a difference in TWSTRS score between females and males. Male is used as the reference group, so females have a TWSTRS score that is 2.18 points higher than males, on average holding everything else constant. However, because the GLM assumes independence of observations, the repeated measures within individuals violate this assumption. As a result, the standard errors and p-values may be underestimated, and inference should be interpreted with caution. This motivates the subsequent use of correlation-aware models such as GEE and GLMM.
+The coefficient for sex was statistically significant, indicating a difference in TWSTRS score between females and males. Male is used as the reference group, so females have a TWSTRS score that is 2.18 points higher than males, on average holding everything else constant. Because a higher TWSTRS score indicates worse outcomes, this suggests that females exhibit worse symptom severity than males, which is consistent with the known epidemiology of cervical dystonia. 
+
+The interaction coefficients between week and treatment were positive, meaning that treated groups tended to show greater increases in TWSTRS over time compared with the control group. Since increases represent worsening symptoms, this indicates a trend toward deterioration over time in the treatment groups, although the interaction effects did not reach statistical significance.
+
+Because the GLM assumes independence of observations, the repeated measures within individuals violate this assumption. As a result, the standard errors and p-values may be underestimated, and inference should be interpreted with caution. This motivates the subsequent use of correlation-aware models such as GEE and GLMM.
 
 ### GLM Model Diagnostics
 
@@ -183,30 +187,29 @@ plot(cooks, type = "h",
      main = "Figure 3: Cook's Distance Plot", 
      ylab = "Cook's Distance", 
      xlab = "Observation")
-abline(h = 4/(length(cooks)-length(coef(glm_fit))), col = "red", lty = 2, lwd = 2)
+abline(h = 4/(length(cooks)), col = "red", lty = 2, lwd = 2)
 ```
 
-Finally, figure 3 displays Cook's distance for all observations. The conventional threshold, 4/(n-k-1), where n is the number of observations and k is the number of predictors, was used to assess the influence of the observations. Several observations exceeded the threshold and were considered potentially influential and warranted further investigation. Therefore, a second GLM was fit, excluding those observations.
+Finally, figure 3 displays Cook's distance for all observations. The conventional threshold, 4/n, where n is the number of observations, was used to assess the influence of the observations. Several observations exceeded the threshold and were considered potentially influential and warranted further investigation. Therefore, a second GLM was fit, excluding those observations.
 
 ```{r}
 #| label: influential-points
 # Identify influential points
 cooks_d <- cooks.distance(glm_fit)
 n <- nrow(cdystonia)
-k <- length(coef(glm_fit))
-threshold <- 4 / (n - k)
+threshold <- 4 / n
 influential_points <- which(cooks_d > threshold)
 
 # Remove influential points
 df_no_influential <- cdystonia[-influential_points, ]
 
 # Refit the model using the cleaned data frame
-kable(tidy(glm(twstrs ~ week + treat + age + sex,
+kable(tidy(glm(twstrs ~ week*treat + age + sex,
                               data = df_no_influential,
                               family = gaussian())), digits=3, caption = "GLM Model Summary (Excluding Influential Observations)")
 ```
 
-Excluding influential observations resulted in modest shifts in the parameter estimates and slightly improved precision. Notably, the effect of week and sex remained statistically significant. Overall, excluding influential points slightly adjusted the estimates and improved precision, but the main patterns of association were consistent with the original GLM. As with the previous model, the GLM assumptions are not appropriate for longitudinal data with correlated repeated measures. The following GEE and GLMM analyses address this limitation by explicitly modeling within-subject correlation and random effects.
+Excluding influential observations resulted in modest shifts in the parameter estimates and slightly improved precision. Notably, the effect of sex remained statistically significant. The treatment effect of 10,000 U at baseline also became stronger and statistically significant while the interaction coeffecients shrunk closer to 0. Overall, excluding influential points slightly adjusted the estimates and improved precision, but the main patterns of association were consistent with the original GLM. As with the previous model, the GLM assumptions are not appropriate for longitudinal data with correlated repeated measures. The following GEE and GLMM analyses address this limitation by explicitly modeling within-subject correlation and random effects.
 
 ### Generalized Estimating Equation (GEE)
 
