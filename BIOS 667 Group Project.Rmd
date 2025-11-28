@@ -82,7 +82,8 @@ tbl <- cdystonia_wk0 |>
       twstrs~"{mean} ({sd})")) |>
   add_overall() |>
   add_p(pvalue_fun = ~style_sigfig(., digits = 4),
-        all_continuous()~"oneway.test") |>
+        all_continuous()~"oneway.test",
+        test.args=all_tests("oneway.test")~list(var.equal=T)) |>
   modify_footnote(
     all_stat_cols() ~ 
       "BotB = botulinum toxin type B; TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale.",
