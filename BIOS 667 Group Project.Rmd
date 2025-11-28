@@ -1,5 +1,5 @@
 ---
-title: "BIOS 667 Group 5"
+title: "Examining BotB treatment effects over time for CD patients"
 author: 
 - Lily Bai
 - Nathalie Blasco
@@ -69,8 +69,9 @@ cdystonia_wk0 <- cdystonia %>%
 tbl <- cdystonia_wk0 |>
   tbl_summary(by = treat, 
               include = c(sex, age,twstrs),
+              digits=all_continuous()~1,
               type=all_continuous()~"continuous2",
-              label = list(sex = "Sex",age~"Age (years)",twstrs="TWSTRS total score at baseline"),
+              label = list(sex = "Sex, n(%)",age~"Age (years)",twstrs="TWSTRS total score at baseline"),
               statistic = list(
       age ~ c(
       "{N_obs}",
@@ -89,54 +90,18 @@ tbl <- cdystonia_wk0 |>
   modify_spanning_header(c(stat_2,stat_3)~"**BotB**") 
 
 tbl$table_body$label[tbl$table_body$label == "No. obs."] <- "N"
-# making a wide dataset
-cdystonia_wide <- cdystonia %>%
-  pivot_wider(
-    id_cols = c(id, treat, site, age, sex), 
-    names_from = week,                     
-    values_from = twstrs,              
-    names_prefix = "twstrs_"                 
-  ) 
 
-ten_subjects_wide <- cdystonia_wide %>% 
-  head(10)
-
-tbl2 <-
-  ten_subjects_wide %>%
-  dplyr::select(id, treat, age, sex, twstrs_2, twstrs_4, twstrs_8, twstrs_12, twstrs_16) %>%
-  
-  # 1. Create the gtsummary listing object
-  tbl_listing() %>%
-  
-  # 2. Modify the column headers using modify_header()
-  modify_header(
-    id = "**ID**",
-    trt = "**Group**",
-    age = "**Age**",
-    sexc = "**Sex**",
-    twstrs_2 = "**Week 2**",
-    twstrs_4 = "**Week 4**",
-    twstrs_8 = "**Week 8**",
-    twstrs_12 = "**Week 12**",
-    twstrs_16 = "**Week 16**"
-  ) %>%
-    as_kable_extra(
-    booktabs = TRUE,
-    longtable = TRUE,
-    linesep = "",
-    caption = "TWSTRS scores for 109 patients with CD at weeks 2, 4, 8, 12, 16"
-  )
 ```
 
 ## Introduction
 
-The purpose of this project is to examine the effects of botulism toxin type B (BotB) to treat cervical dystonia over time. Cervical dystonia (CD) is a chronic neurological disorder, in which patients have painful involuntary contractions in neck muscles. CD is more prevalent in women [@jankovic_treatment_2023]. The prevalence of CD is estimated to be 28-183 cases per million. The data comes from a multicenter randomized clinical trial for cervical dystonia patients with 9 U.S. sites. Botulism toxin types A and B are first-line treatments for CD [@wetmore_clinical_2025]. The treatment groups included in the study were placebo, 5000 U BotB, and 10000 U BotB. The response variable is Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 85 and is comprised of disability (0-30), pain (0-20), and severity (0-35) subscores. Only total score is included in this data.The TWSTRS score was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after treatment start. Site is included in the dataset but no further details about site were included in the available dataset documentation.
+The purpose of this project is to examine the effects of botulism toxin type B (BotB) to treat cervical dystonia over time. Cervical dystonia (CD) is a chronic neurological disorder, in which patients have painful involuntary contractions in neck muscles. CD is more prevalent in women [@jankovic_treatment_2023]. The prevalence of CD is estimated to be 28-183 cases per million. The data comes from a multicenter randomized clinical trial for cervical dystonia patients with 9 U.S. sites. Botulism toxin types A and B are first-line treatments for CD [@wetmore_clinical_2025]. The treatment groups included in the study were placebo, 5000 U BotB, and 10000 U BotB. The response variable is Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 87 and is comprised of disability (0-32), pain (0-20), and severity (0-35) subscores. Only total score is included in this data. The TWSTRS score was measured at week 0 (baseline), and 2,4,8,12, and 16 weeks after treatment start. Site is included in the dataset but no further details about site were included in the available dataset documentation.
 
 ## Methods
 
 ### *Study Population*
 
-Inclusion and exclusion criteria for the trial were not available. Duration of CD and age at onset were not known. The study included 109 patients (67 (61%)) females. The mean age was 56 (12) years. Median age was 56 years. The mean TWSTRS score at baseline was 46 (10). Demographic and baseline characteristics were similar among the three treatment groups (Table 2). It was not known if the patients received prior BotB treatments. Information about the randomization schedule was not provided.
+To be included in the study, patients must have had CD for at least 1 year involving two or more muscles and CD continued response to BotA treatment. Patients also had to have TWSTRS score $\geq 20$ with severity score $\geq 10$, disability score $\geq 3$, and pain score $\geq 1$. Patients were at least 18 years old, minimum weight of 46 kg, and had acceptable phsyical and neurological exams as well as labs. Patients who had neurotoxin injection in the last 4 months were exlcuded and could not have participated in previous BotB trials [@brashear_safety_1999]. The study included 109 patients (67 (61%)) females. The mean age was 55.5 (12.1) years. Median age was 56.0 years. The mean TWSTRS score at baseline was 45.7 (9.7). Demographic and baseline characteristics were similar among the three treatment groups (Table 1). It was not known if the patients received prior BotB treatments. Information about the randomization schedule was not provided.
 
 ### *Statistical Analyses*
 
@@ -144,11 +109,6 @@ Number of observations, mean, median, standard deviation (SD), minimum (min) and
 
 \newpage
 ## Results
-
-```{r,echo=FALSE}
-#| label: demo-characteristics
-tbl2
-```
 
 ```{r,echo=FALSE}
 #| label: preliminary tables
@@ -164,7 +124,6 @@ tbl1<-as_kable_extra(tbl,
 tbl1
 ```
 
-\newpage
 ### Generalized Linear Model (GLM)
 
 A generalized linear model (GLM model) using a Gaussian link was fit including week, treatment, age, and sex as predictors (Table 3).
@@ -174,9 +133,7 @@ A generalized linear model (GLM model) using a Gaussian link was fit including w
 # Fit a GLM
 glm_fit <- glm(twstrs ~ week + treat + age + sex,
                data = cdystonia,
-               family = gaussian)
-
-
+               family = gaussian) 
 
 kable(tidy(glm_fit), digits=3, caption = "GLM Model Summary (Gaussian Link)")
 ```
@@ -327,7 +284,7 @@ tidy(gee_main, effects = "fixed") %>%
   kable(digits = 3, caption = "GEE Model Summary")
 ```
 
-Table 5 summarizes the GEE estimates for TWSTRS over time by treatment, adjusted for age and sex. The main effects for treat5000U (−0.810, p = 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at week 0 with placebo. Both estimates are negative but not statistically significant, indicating no clear baseline differences in mean TWSTRS between treatment groups and placebo. The treatment-by-week interaction terms describe how each treatment's trajectory differs from placebo over time. For 5000U, the additional slope relative to placebo is small and not significant (0.115, p = 0.388), suggesting that its average linear trend over time is similar to placebo. For 10000U, the additional slope is larger and statistically significant (0.323, p = 0.027), indicating an average increase in TWSTRS over 16 weeks compared with placebo. Because higher TWSTRS scores reflect worse symptoms, these results imply that low-dose regimen behaves similarly to placebo, while the high-dose regimen is associated with faster worsening over time. Overall, the GEE model provides a reasonable approach for assessing whether treatment affects population-average TWSTRS trajectories over time, while recognizing that the true time course is somewhat non-linear and that estimated treatment effects are relatively small.
+Table 4 summarizes the GEE estimates for TWSTRS over time by treatment, adjusted for age and sex. The main effects for treat5000U (−0.810, p = 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at week 0 with placebo. Both estimates are negative but not statistically significant, indicating no clear baseline differences in mean TWSTRS between treatment groups and placebo. The treatment-by-week interaction terms describe how each treatment's trajectory differs from placebo over time. For 5000U, the additional slope relative to placebo is small and not significant (0.115, p = 0.388), suggesting that its average linear trend over time is similar to placebo. For 10000U, the additional slope is larger and statistically significant (0.323, p = 0.027), indicating an average increase in TWSTRS over 16 weeks compared with placebo. Because higher TWSTRS scores reflect worse symptoms, these results imply that low-dose regimen behaves similarly to placebo, while the high-dose regimen is associated with faster worsening over time. Overall, the GEE model provides a reasonable approach for assessing whether treatment affects population-average TWSTRS trajectories over time, while recognizing that the true time course is somewhat non-linear and that estimated treatment effects are relatively small.
 
 ### Generalized Linear Mixed Effects Model (GLMM) 
 
@@ -355,7 +312,7 @@ broom.mixed::tidy(glmm_fit, effects = "fixed", conf.int = TRUE) %>%
   kable(digits = 3, caption = "GLMM Model Summary")
 ```
 
-Table 6 presents the fixed effect estimates from the linear mixed model. Consistent with the previous GEE analysis, the point estimates for the fixed effects are identical, as expected for a linear model with a Gaussian distribution. However, the standard errors and p-values differ slightly reflecting the distinction between model-based (GLMM) and robust (GEE) variance estimation.
+Table 5 presents the fixed effect estimates from the linear mixed model. Consistent with the previous GEE analysis, the point estimates for the fixed effects are identical, as expected for a linear model with a Gaussian distribution. However, the standard errors and p-values differ slightly reflecting the distinction between model-based (GLMM) and robust (GEE) variance estimation.
 
 At baseline, there were no statistically significant differences in disease severity between the treatment arms and the placebo group. Neither age nor sex are significant predictors for TWSTRS. The primary finding is the significant interaction between the 10000 U treatment and week ($\beta = 0.323, SE = 0.125, p = 0.010$). This confirms that, conditional on the individual patient, the high-dose group experienced a significantly faster rate of worsening, increasing by approximately 0.32 points per week relative to the placebo group.
 
@@ -479,16 +436,8 @@ The Q-Q plot for the random intercepts (Figure 10) assesses the assumption that 
 
 We also confirm that the model converged successfully.
 
-
-
-
 ## Discussion
-
-Summarization of main points, conclusions based in results \
-Summarization of the various models applied, which ones you prefer and base your interpretations off of and why \
-Discussion of limitations if any
-
-
+The actual trial did an ANCOVA model using week 4 TWSTRS score as the primary outcome measure, which does not account for treatment effects over time [@brashear_safety_1999]. The best model of course depends on which research question an investigator wants answered. In this project, GLMM and GEE were the best choices for examining treatment effects over time. None of the models fit here showed a significant treatment effect.
 
 ## References
 

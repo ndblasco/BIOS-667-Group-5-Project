@@ -124,12 +124,12 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={BIOS 667 Group 5},
+  pdftitle={Examining BotB treatment effects over time for CD patients},
   pdfauthor={Lily Bai; Nathalie Blasco; Yihao Peng; Lauren Rackley; Sirui Wu},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{BIOS 667 Group 5}
+\title{Examining BotB treatment effects over time for CD patients}
 \author{Lily Bai \and Nathalie Blasco \and Yihao Peng \and Lauren
 Rackley \and Sirui Wu}
 \date{2025-11-27}
@@ -149,10 +149,10 @@ trial for cervical dystonia patients with 9 U.S. sites. Botulism toxin
 types A and B are first-line treatments for CD (Wetmore et al., 2025).
 The treatment groups included in the study were placebo, 5000 U BotB,
 and 10000 U BotB. The response variable is Toronto Western Spasmodic
-Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 85
-and is comprised of disability (0-30), pain (0-20), and severity (0-35)
-subscores. Only total score is included in this data.The TWSTRS score
-was measured at week 0 (baseline), and 2,4,6,8,12, and 16 weeks after
+Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 87
+and is comprised of disability (0-32), pain (0-20), and severity (0-35)
+subscores. Only total score is included in this data. The TWSTRS score
+was measured at week 0 (baseline), and 2,4,8,12, and 16 weeks after
 treatment start. Site is included in the dataset but no further details
 about site were included in the available dataset documentation.
 
@@ -161,14 +161,20 @@ about site were included in the available dataset documentation.
 \subsubsection{\texorpdfstring{\emph{Study
 Population}}{Study Population}}\label{study-population}
 
-Inclusion and exclusion criteria for the trial were not available.
-Duration of CD and age at onset were not known. The study included 109
-patients (67 (61\%)) females. The mean age was 56 (12) years. Median age
-was 56 years. The mean TWSTRS score at baseline was 46 (10). Demographic
-and baseline characteristics were similar among the three treatment
-groups (Table 2). It was not known if the patients received prior BotB
-treatments. Information about the randomization schedule was not
-provided.
+To be included in the study, patients must have had CD for at least 1
+year involving two or more muscles and CD continued response to BotA
+treatment. Patients also had to have TWSTRS score \(\geq 20\) with
+severity score \(\geq 10\), disability score \(\geq 3\), and pain score
+\(\geq 1\). Patients were at least 18 years old, minimum weight of 46
+kg, and had acceptable phsyical and neurological exams as well as labs.
+Patients who had neurotoxin injection in the last 4 months were exlcuded
+and could not have participated in previous BotB trials (Brashear et
+al., 1999). The study included 109 patients (67 (61\%)) females. The
+mean age was 55.5 (12.1) years. Median age was 56.0 years. The mean
+TWSTRS score at baseline was 45.7 (9.7). Demographic and baseline
+characteristics were similar among the three treatment groups (Table 1).
+It was not known if the patients received prior BotB treatments.
+Information about the randomization schedule was not provided.
 
 \subsubsection{\texorpdfstring{\emph{Statistical
 Analyses}}{Statistical Analyses}}\label{statistical-analyses}
@@ -191,24 +197,6 @@ performed using R (version 4.4.2, R Core Team, 2024).
 
 \subsection{Results}\label{results}
 
-\begin{longtable}[t]{lllllllll}
-\caption{\label{tab:unnamed-chunk-1}TWSTRS scores for 109 patients with CD at weeks 2, 4, 8, 12, 16}\\
-\toprule
-\textbf{ID} & \textbf{treat} & \textbf{Age} & \textbf{sex} & \textbf{Week 2} & \textbf{Week 4} & \textbf{Week 8} & \textbf{Week 12} & \textbf{Week 16}\\
-\midrule
-1 & 2 & 65 & 2 & 30 & 24 & 37 & 39 & 36\\
-2 & 3 & 70 & 2 & 26 & 27 & 41 & 65 & 67\\
-3 & 2 & 64 & 2 & 20 & 23 & 26 & 35 & 35\\
-4 & 1 & 59 & 2 & 61 & 64 & 62 &  & \\
-5 & 3 & 76 & 2 & 35 & 48 & 49 & 41 & 51\\
-6 & 3 & 59 & 2 & 34 & 43 & 48 & 48 & 51\\
-7 & 2 & 72 & 1 & 32 & 32 & 43 & 42 & 46\\
-8 & 1 & 40 & 1 & 33 & 21 & 27 & 32 & 38\\
-9 & 2 & 52 & 2 & 32 & 34 & 35 & 37 & 36\\
-10 & 1 & 47 & 1 & 10 & 31 & 32 & 6 & 14\\
-\bottomrule
-\end{longtable}
-
 \begin{longtable}[t]{lccccc}
 \caption{\label{tab:preliminary tables}Summary of Demographic and Baseline Characteristics}\\
 \toprule
@@ -216,22 +204,20 @@ performed using R (version 4.4.2, R Core Team, 2024).
 \cmidrule(l{3pt}r{3pt}){4-5}
 \textbf{Characteristic} & \makecell[c]{\textbf{Overall}\ \ \\N = 109} & \makecell[c]{\textbf{Placebo}\ \ \\N = 36} & \makecell[c]{\textbf{5000 U}\ \ \\N = 36} & \makecell[c]{\textbf{10000 U}\ \ \\N = 37} & \textbf{p-value}\\
 \midrule
-Sex &  &  &  &  & 0.0706\\
+Sex, n(\%) &  &  &  &  & 0.0706\\
 \hspace{1em}Male & 42 (39\%) & 15 (42\%) & 18 (50\%) & 9 (24\%) & \\
 \hspace{1em}Female & 67 (61\%) & 21 (58\%) & 18 (50\%) & 28 (76\%) & \\
 Age (years) &  &  &  &  & 0.6198\\
-\hspace{1em}N & 109 & 36 & 36 & 37 & \\
-\hspace{1em}Mean (SD) & 56 (12) & 54 (12) & 57 (12) & 56 (12) & \\
-\hspace{1em}Median & 56 & 56 & 57 & 54 & \\
-\hspace{1em}Min, Max & 26, 83 & 26, 79 & 35, 83 & 34, 76 & \\
+\hspace{1em}N & 109.0 & 36.0 & 36.0 & 37.0 & \\
+\hspace{1em}Mean (SD) & 55.5 (12.1) & 53.8 (12.3) & 57.1 (12.4) & 55.7 (11.8) & \\
+\hspace{1em}Median & 56.0 & 55.5 & 57.0 & 54.0 & \\
+\hspace{1em}Min, Max & 26.0, 83.0 & 26.0, 79.0 & 35.0, 83.0 & 34.0, 76.0 & \\
 TWSTRS total score at baseline &  &  &  &  & 0.3307\\
-\hspace{1em}Mean (SD) & 46 (10) & 44 (9) & 46 (10) & 47 (10) & \\
+\hspace{1em}Mean (SD) & 45.7 (9.7) & 43.6 (9.0) & 46.4 (10.4) & 46.9 (9.6) & \\
 \bottomrule
 \multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{1} BotB = botulinum toxin type B; TWSTRS = Toronto Western Spasmodic Torticollis Rating Scale.}\\
 \multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{2} Pearson's Chi-squared test; Kruskal-Wallis rank sum test}\\
 \end{longtable}
-
-\newpage
 
 \subsubsection{Generalized Linear Model
 (GLM)}\label{generalized-linear-model-glm}
@@ -378,7 +364,7 @@ week:treat5000 U & 0.115 & 0.133 & 0.745 & 0.388 \\
 week:treat10000 U & 0.323 & 0.146 & 4.899 & 0.027 \\
 \end{longtable}
 
-Table 5 summarizes the GEE estimates for TWSTRS over time by treatment,
+Table 4 summarizes the GEE estimates for TWSTRS over time by treatment,
 adjusted for age and sex. The main effects for treat5000U (−0.810, p =
 0.769) and treat10000U (−2.738, p = 0.248) compare baseline TWSTRS at
 week 0 with placebo. Both estimates are negative but not statistically
@@ -486,7 +472,7 @@ fixed & treat10000 U:week & 0.323 & 0.125 & 2.582 & 521.609 & 0.010 &
 0.077 & 0.569 \\
 \end{longtable}
 
-Table 6 presents the fixed effect estimates from the linear mixed model.
+Table 5 presents the fixed effect estimates from the linear mixed model.
 Consistent with the previous GEE analysis, the point estimates for the
 fixed effects are identical, as expected for a linear model with a
 Gaussian distribution. However, the standard errors and p-values differ
@@ -613,16 +599,26 @@ We also confirm that the model converged successfully.
 
 \subsection{Discussion}\label{discussion}
 
-Summarization of main points, conclusions based in results\\
-Summarization of the various models applied, which ones you prefer and
-base your interpretations off of and why\\
-Discussion of limitations if any
+The actual trial did an ANCOVA model using week 4 TWSTRS score as the
+primary outcome measure, which does not account for treatment effects
+over time (Brashear et al., 1999). The best model of course depends on
+which research question an investigator wants answered. In this project,
+GLMM and GEE were the best choices for examining treatment effects over
+time. None of the models fit here showed a significant treatment effect.
 
 \subsection*{References}\label{references}
 \addcontentsline{toc}{subsection}{References}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-brashear_safety_1999}
+Brashear, A., Lew, M. F., Dykstra, D. D., Comella, C. L., Factor, S. A.,
+Rodnitzky, R. L., Trosch, R., Singer, C., Brin, M. F., Murray, J. J.,
+Wallace, J. D., Willmer--Hulme, A., \& Koller, M. (1999). Safety and
+efficacy of {NeuroBloc} ({Botulinum} toxin type b) in type
+{A}--responsive cervical dystonia. \emph{Neurology}, \emph{53}(7),
+1439--1439. \url{https://doi.org/10.1212/WNL.53.7.1439}
+
 \bibitem[\citeproctext]{ref-jankovic_treatment_2023}
 Jankovic, J., Tsui, J., \& Brin, M. F. (2023). Treatment of cervical
 dystonia with {Botox} ({Onabotulinumtoxina}): {Development}, insights,
