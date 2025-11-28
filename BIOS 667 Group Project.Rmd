@@ -98,18 +98,15 @@ tbl$table_body$label[tbl$table_body$label == "No. obs."] <- "N"
 The purpose of this project is to examine the effects of botulism toxin type B (BotB) to treat cervical dystonia over time. Cervical dystonia (CD) is a chronic neurological disorder, in which patients have painful involuntary contractions in neck muscles. CD is more prevalent in women [@jankovic_treatment_2023]. The prevalence of CD is estimated to be 28-183 cases per million. The data comes from a multicenter randomized clinical trial for cervical dystonia patients with 9 U.S. sites. Botulism toxin types A and B are first-line treatments for CD [@wetmore_clinical_2025]. The treatment groups included in the study were placebo, 5000 U BotB, and 10000 U BotB. The response variable is Toronto Western Spasmodic Torticollis Rating Scale (TWSTRS) total score, which ranges from 0 to 87 and is comprised of disability (0-32), pain (0-20), and severity (0-35) subscores. Only total score is included in this data. The TWSTRS score was measured at week 0 (baseline), and 2,4,8,12, and 16 weeks after treatment start. Site is included in the dataset but no further details about site were included in the available dataset documentation.
 
 ## Methods
-
-### *Study Population*
-
-To be included in the study, patients must have had CD for at least 1 year involving two or more muscles and CD continued response to BotA treatment. Patients also had to have TWSTRS score $\geq 20$ with severity score $\geq 10$, disability score $\geq 3$, and pain score $\geq 1$. Patients were at least 18 years old, minimum weight of 46 kg, and had acceptable phsyical and neurological exams as well as labs. Patients who had neurotoxin injection in the last 4 months were exlcuded and could not have participated in previous BotB trials [@brashear_safety_1999]. The study included 109 patients (67 (61%)) females. The mean age was 55.5 (12.1) years. Median age was 56.0 years. The mean TWSTRS score at baseline was 45.7 (9.7). Demographic and baseline characteristics were similar among the three treatment groups (Table 1). It was not known if the patients received prior BotB treatments. Information about the randomization schedule was not provided.
-
 ### *Statistical Analyses*
 
 Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable. For GLM, age, sex, week, and treatment were used as covariates with male and placebo being the reference groups. For the GEE and GLMM models, week, age, sex, treatment, and treatment $\times$ week interaction were included in the model again with male and placebo being the reference groups. Both random slope and random intercept models were fit. ANOVA was used to compare the random slope and random intercept models. A Gaussian link function was used for all three model types. Statistical analyses were performed using R (version 4.4.2, R Core Team, 2024).
 
-\newpage
 ## Results
+### *Study Population*
 
+To be included in the study, patients must have had CD for at least 1 year involving two or more muscles and CD continued response to BotA treatment. Patients also had to have TWSTRS score $\geq 20$ with severity score $\geq 10$, disability score $\geq 3$, and pain score $\geq 1$. Patients were at least 18 years old, minimum weight of 46 kg, and had acceptable phsyical and neurological exams as well as labs. Patients who had neurotoxin injection in the last 4 months were exlcuded and could not have participated in previous BotB trials [@brashear_safety_1999]. The study included 109 patients (67 (61%)) females. The mean age was 55.5 (12.1) years. Median age was 56.0 years. The mean TWSTRS score at baseline was 45.7 (9.7). Demographic and baseline characteristics were similar among the three treatment groups (Table 1).
+\newpage
 ```{r,echo=FALSE}
 #| label: preliminary tables
 
