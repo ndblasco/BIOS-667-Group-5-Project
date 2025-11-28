@@ -1,12 +1,10 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
+%
 \documentclass[
 ]{article}
-\usepackage{xcolor}
-\usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -37,6 +35,8 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
 \usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
@@ -49,55 +49,44 @@
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\newsavebox\pandoc@box
-\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
-  \sbox\pandoc@box{#1}%
-  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
-  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
-  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
-  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
-  \else\usebox{\pandoc@box}%
-  \fi%
-}
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 % Set default figure placement to htbp
+\makeatletter
 \def\fps@figure{htbp}
 \makeatother
-% definitions for citeproc citations
-\NewDocumentCommand\citeproctext{}{}
-\NewDocumentCommand\citeproc{mm}{%
-  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
-\makeatletter
- % allow citations to break across lines
- \let\@cite@ofmt\@firstofone
- % avoid brackets around text for \cite:
- \def\@biblabel#1{}
- \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
 \setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
- {\begin{list}{}{%
-  \setlength{\itemindent}{0pt}
-  \setlength{\leftmargin}{0pt}
-  \setlength{\parsep}{0pt}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
   % turn on hanging indent if param 1 is 1
   \ifodd #1
-   \setlength{\leftmargin}{\cslhangindent}
-   \setlength{\itemindent}{-1\cslhangindent}
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
   \fi
   % set entry spacing
-  \setlength{\itemsep}{#2\baselineskip}}}
- {\end{list}}
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
 \usepackage{calc}
-\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -120,7 +109,10 @@
 \usepackage{tabularx}
 \usepackage{adjustbox}
 \usepackage{hyperref}
-\usepackage{bookmark}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
@@ -132,12 +124,13 @@
 \title{Examining BotB treatment effects over time for CD patients}
 \author{Lily Bai \and Nathalie Blasco \and Yihao Peng \and Lauren
 Rackley \and Sirui Wu}
-\date{2025-11-27}
+\date{2025-11-28}
 
 \begin{document}
 \maketitle
 
-\subsection{Introduction}\label{introduction}
+\hypertarget{introduction}{%
+\subsection{Introduction}\label{introduction}}
 
 The purpose of this project is to examine the effects of botulism toxin
 type B (BotB) to treat cervical dystonia over time. Cervical dystonia
@@ -156,10 +149,12 @@ was measured at week 0 (baseline), and 2,4,8,12, and 16 weeks after
 treatment start. Site is included in the dataset but no further details
 about site were included in the available dataset documentation.
 
-\subsection{Methods}\label{methods}
+\hypertarget{methods}{%
+\subsection{Methods}\label{methods}}
 
+\hypertarget{statistical-analyses}{%
 \subsubsection{\texorpdfstring{\emph{Statistical
-Analyses}}{Statistical Analyses}}\label{statistical-analyses}
+Analyses}}{Statistical Analyses}}\label{statistical-analyses}}
 
 Number of observations, mean, median, standard deviation (SD), minimum
 (min) and maximum (max) were provided for age. Mean and SD were
@@ -175,10 +170,12 @@ compare the random slope and random intercept models. A Gaussian link
 function was used for all three model types. Statistical analyses were
 performed using R (version 4.4.2, R Core Team, 2024).
 
-\subsection{Results}\label{results}
+\hypertarget{results}{%
+\subsection{Results}\label{results}}
 
+\hypertarget{study-population}{%
 \subsubsection{\texorpdfstring{\emph{Study
-Population}}{Study Population}}\label{study-population}
+Population}}{Study Population}}\label{study-population}}
 
 To be included in the study, patients must have had CD for at least 1
 year involving two or more muscles and CD continued response to BotA
@@ -221,8 +218,9 @@ TWSTRS total score at baseline &  &  &  &  & 0.3307\\
 \multicolumn{6}{l}{\rule{0pt}{1em}\textsuperscript{2} Pearson's Chi-squared test; Kruskal-Wallis rank sum test}\\
 \end{longtable}
 
+\hypertarget{generalized-linear-model-glm}{%
 \subsubsection{Generalized Linear Model
-(GLM)}\label{generalized-linear-model-glm}
+(GLM)}\label{generalized-linear-model-glm}}
 
 A generalized linear model (GLM model) using a Gaussian link was fit
 including week, treatment, age, and sex as predictors (Table 2).
@@ -259,23 +257,24 @@ and p-values may be underestimated, and inference should be interpreted
 with caution. This motivates the subsequent use of correlation-aware
 models such as GEE and GLMM.
 
-\subsubsection{GLM Model Diagnostics}\label{glm-model-diagnostics}
+\hypertarget{glm-model-diagnostics}{%
+\subsubsection{GLM Model Diagnostics}\label{glm-model-diagnostics}}
 
 Diagnostics were assessed for the GLM model.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/glm-diagnostics-1.pdf}}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/glm-diagnostics-1.pdf}
 
 Figure 1 shows the residuals versus the fitted values. The absence of
 strong patterns or fanning suggests that the linearity and
 homoscedasticity assumptions are reasonably met.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/glm-qqplot-1.pdf}}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/glm-qqplot-1.pdf}
 
 Figure 2 presents a QQ plot of the residuals, which largely follow the
 45 degree reference line with mild deviations in the tails. This
 indicates that the normality assumption is approximately satisfied.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/cooks-d-1.pdf}}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/cooks-d-1.pdf}
 
 Finally, figure 3 displays Cook's distance for all observations. The
 conventional threshold, 4/(n-k-1), where n is the number of observations
@@ -315,15 +314,16 @@ appropriate for longitudinal data with correlated repeated measures. The
 following GEE and GLMM analyses address this limitation by explicitly
 modeling within-subject correlation and random effects.
 
+\hypertarget{generalized-estimating-equation-gee}{%
 \subsubsection{Generalized Estimating Equation
-(GEE)}\label{generalized-estimating-equation-gee}
+(GEE)}\label{generalized-estimating-equation-gee}}
 
 A GEE model with Gaussian family, identity link, and an exchangeable
 correlation structure. The mean model included week, treatment,
 treatment-by-week interaction, and baseline age and sex, with Placebo as
 the reference treatment group.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/gee-diagnostics-1.pdf}}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/gee-diagnostics-1.pdf}
 
 Figure 4 shows Pearson residuals plotted against the fitted TWSTRS
 values with points colored by treatment group. The residuals are
@@ -336,7 +336,7 @@ robust standard errors, the uncertainty in the regression coefficients
 is driven by the observed variability of the residuals within subjects,
 rather than depending on the working variance and correlation.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/mean-profiles-1.pdf}}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/mean-profiles-1.pdf}
 
 Figure 5 shows mean TWSTRS over time by treatment group. All groups show
 decreases from baseline through weeks 2--4, suggesting early
@@ -386,8 +386,9 @@ affects population-average TWSTRS trajectories over time, while
 recognizing that the true time course is somewhat non-linear and that
 estimated treatment effects are relatively small.
 
+\hypertarget{generalized-linear-mixed-effects-model-glmm}{%
 \subsubsection{Generalized Linear Mixed Effects Model
-(GLMM)}\label{generalized-linear-mixed-effects-model-glmm}
+(GLMM)}\label{generalized-linear-mixed-effects-model-glmm}}
 
 While the GEE model provides population-averaged estimates, we
 implemented a Generalized Linear Mixed Model (GLMM) to model
@@ -400,15 +401,15 @@ they provide valid inference under the Missing at Random (MAR)
 assumption.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0787}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.2022}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1011}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1124}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1124}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0899}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0899}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1011}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1124}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0787}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.2022}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1011}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1124}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1124}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0899}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0899}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1011}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1124}}@{}}
 \caption{GLMM Model Summary}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
@@ -554,14 +555,14 @@ points per week relative to the placebo group.
 The ANOVA analysis shows that random slope model is not better than the
 random intercept model.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/pred-glmm-1.pdf}}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/pred-glmm-1.pdf}
 Figure 6 illustrates the model-predicted trajectories for TWSTRS across
 the three treatment groups. The blue line representing 10000 U treatment
 and the red line for placebo cross each other, showing the significant
 interaction term between 10000 U and week. The relationship between
 treatment and score depends on time.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/predict-subj-glmm-1.pdf}}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/predict-subj-glmm-1.pdf}
 
 Figure 7 displays the observed TWSTRS scores (points) overlaying the
 GLMM fitted trajectories (lines) for a random sample of 12 subjects. The
@@ -577,8 +578,8 @@ week-to-week fluctuations observed in the raw data points, the model
 fits smooth linear trajectories that balance individual trends with the
 overall population average.
 
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/glmm-diagnostics-1.pdf}}
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/glmm-diagnostics-2.pdf}}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/glmm-diagnostics-1.pdf}
+\includegraphics{BIOS-667-Group-Project_files/figure-latex/glmm-diagnostics-2.pdf}
 
 The plot of Pearson residuals against fitted values (Figure 8) shows a
 random scatter of points around the zero line without a distinct funnel
@@ -599,14 +600,91 @@ well satisfied.
 
 We also confirm that the model converged successfully.
 
-\subsection{Discussion}\label{discussion}
+\hypertarget{discussion}{%
+\subsection{Discussion}\label{discussion}}
 
-\subsection*{References}\label{references}
+This study investigated longitudinal changes in cervical dystonia
+severity following administration of botulinum toxin type B (BotB) using
+data from a randomized clinical trial with three treatment arms:
+placebo, 5000U, and 10000U. TWSTRS scores were collected at multiple
+time points over a 16-week follow-up period, providing a
+repeated-measures framework for evaluating differences in symptom
+trajectories across treatment groups.
+
+As an initial exploratory step, a generalized linear model (GLM) was fit
+to examine associations between treatment, time, and relevant
+demographic variables. However, because the GLM assumes independence of
+observations and therefore ignores the within-subject correlation
+inherent to repeated measures, its coefficient estimates cannot be
+interpreted as valid inferential quantities. The GLM served primarily as
+a descriptive benchmark, motivating the use of methods that explicitly
+account for the covariance structure of longitudinal data. Accordingly,
+inference was based on two widely used frameworks for repeated-measures
+analysis: generalized estimating equations (GEE) and generalized linear
+mixed models (GLMM).
+
+Both GEE and GLMM yielded highly concordant fixed-effect estimates. At
+baseline, neither active treatment group differed significantly from
+placebo, and neither age nor sex exhibited meaningful associations with
+initial severity or subsequent change. Across both modeling approaches,
+the 5,000U group showed no statistically detectable deviation from the
+placebo trajectory, as evidenced by a nonsignificant treatment-by-time
+interaction. In contrast, the 10,000U group consistently demonstrated a
+significantly more positive slope relative to placebo, indicating a
+faster rate of symptom worsening over the 16-week period. Given that
+higher TWSTRS scores correspond to greater clinical impairment, this
+finding suggests that the higher dose may be associated with an adverse
+rather than therapeutic longitudinal profile. The consistency of this
+effect across both the marginal (GEE) and conditional (GLMM) modeling
+frameworks strengthens the robustness of the conclusion.
+
+Although the estimated treatment effects were similar across GEE and
+GLMM, the two approaches target different estimands. GEE yields
+population-averaged (marginal) effects, characterizing the mean response
+pattern in the study population. GLMM, through inclusion of random
+effects, generates subject-specific (conditional) estimates and
+partitions variation into between-subject and within-subject components.
+Model comparison indicated that a random-intercept structure was
+sufficient to capture substantial heterogeneity in baseline TWSTRS
+levels, whereas including random slopes did not improve model fit,
+implying limited between-subject variability in rates of change.
+Diagnostic evaluations supported the adequacy of the mixed-model
+assumptions: random intercepts were approximately normally distributed,
+fitted-versus-residual plots exhibited no major departures from
+homoscedasticity, and residual-versus-time plots showed only mild
+nonlinear patterns.
+
+Because GEE and GLMM address different scientific aims, the choice
+between them depends on whether inference is sought for marginal
+population-level effects (favoring GEE) or for individual-level
+trajectories and conditional effects (favoring GLMM). In this analysis,
+both approaches converged on the same substantive conclusion: neither
+the 5,000U nor the 10,000U dose of BotB produced improvement relative to
+placebo, and the higher dose was associated with a significantly more
+pronounced deterioration in symptoms over time.
+
+Several limitations should be considered. First, modeling time as a
+linear term simplifies an empirically nonlinear trajectory characterized
+by early improvement followed by subsequent worsening. More flexible
+time-varying specifications, such as spline-based or piecewise models,
+may offer a more accurate representation of the underlying mean
+structure. Second, the sample size within each treatment arm was modest,
+limiting statistical power, particularly for detecting smaller
+interaction effects or subtle differences in longitudinal profiles.
+Third, the dataset lacked detailed clinical covariates that could
+potentially account for heterogeneity in treatment response across
+individuals. Future analyses incorporating richer baseline information,
+nonlinear longitudinal modeling, and more frequent early follow-up
+assessments would enable a more comprehensive characterization of
+dose--response dynamics in cervical dystonia.
+
+\hypertarget{references}{%
+\subsection*{References}\label{references}}
 \addcontentsline{toc}{subsection}{References}
 
-\phantomsection\label{refs}
+\hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
-\bibitem[\citeproctext]{ref-brashear_safety_1999}
+\leavevmode\vadjust pre{\hypertarget{ref-brashear_safety_1999}{}}%
 Brashear, A., Lew, M. F., Dykstra, D. D., Comella, C. L., Factor, S. A.,
 Rodnitzky, R. L., Trosch, R., Singer, C., Brin, M. F., Murray, J. J.,
 Wallace, J. D., Willmer--Hulme, A., \& Koller, M. (1999). Safety and
@@ -614,13 +692,13 @@ efficacy of {NeuroBloc} ({Botulinum} toxin type b) in type
 {A}--responsive cervical dystonia. \emph{Neurology}, \emph{53}(7),
 1439--1439. \url{https://doi.org/10.1212/WNL.53.7.1439}
 
-\bibitem[\citeproctext]{ref-jankovic_treatment_2023}
+\leavevmode\vadjust pre{\hypertarget{ref-jankovic_treatment_2023}{}}%
 Jankovic, J., Tsui, J., \& Brin, M. F. (2023). Treatment of cervical
 dystonia with {Botox} ({Onabotulinumtoxina}): {Development}, insights,
 and impact. \emph{Medicine}, \emph{102}(S1), e32403.
 \url{https://doi.org/10.1097/MD.0000000000032403}
 
-\bibitem[\citeproctext]{ref-wetmore_clinical_2025}
+\leavevmode\vadjust pre{\hypertarget{ref-wetmore_clinical_2025}{}}%
 Wetmore, E., Roberts, H., Livinski, A. A., Camacho, T., Eaton, C.,
 Norato, G., Hallett, M., \& Stacy, M. (2025). Clinical response to
 placebo botulinum toxin injection in cervical dystonia---a systematic
