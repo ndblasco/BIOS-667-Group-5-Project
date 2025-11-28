@@ -139,7 +139,7 @@ glm_fit <- glm(twstrs ~ week * treat + age + sex,
 kable(tidy(glm_fit), digits=3, caption = "GLM Model Summary (Gaussian Link)")
 ```
 
-The coefficient for sex was statistically significant, indicating a difference in TWSTRS score between females and males. Male is used as the reference group, so females have a TWSTRS score that is 2.18 points higher than males, on average holding everything else constant. Because a higher TWSTRS score indicates worse outcomes, this suggests that females exhibit worse symptom severity than males, which is consistent with the known epidemiology of cervical dystonia. 
+The coefficient for sex was statistically significant, indicating a difference in TWSTRS score between females and males. Male is used as the reference group, so females have a TWSTRS score that is 2.15 points higher than males, on average holding everything else constant. Because a higher TWSTRS score indicates worse outcomes, this suggests that females exhibit worse symptom severity than males, which is consistent with the known epidemiology of cervical dystonia. 
 
 The interaction coefficients between week and treatment were positive, meaning that treated groups tended to show greater increases in TWSTRS over time compared with the control group. Since increases represent worsening symptoms, this indicates a trend toward deterioration over time in the treatment groups, although the interaction effects did not reach statistical significance.
 
