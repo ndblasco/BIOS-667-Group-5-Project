@@ -123,7 +123,7 @@ tbl1
 
 ### Generalized Linear Model (GLM)
 
-A generalized linear model (GLM model) using a Gaussian link was fit including week, treatment, age, and sex as predictors (Table 3).
+A generalized linear model (GLM model) using a Gaussian link was fit including week, treatment, age, and sex as predictors (Table 2).
 
 ```{r}
 #| label: glm-fit
@@ -434,7 +434,7 @@ The Q-Q plot for the random intercepts (Figure 10) assesses the assumption that 
 We also confirm that the model converged successfully.
 
 ## Discussion
-The actual trial did an ANCOVA model using week 4 TWSTRS score as the primary outcome measure, which does not account for treatment effects over time [@brashear_safety_1999]. The best model of course depends on which research question an investigator wants answered. In this project, GLMM and GEE were the best choices for examining treatment effects over time. None of the models fit here showed a significant treatment effect.
+
 
 ## References
 
