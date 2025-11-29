@@ -3,7 +3,10 @@
 ### RQ: Does treatment have a significant effect on TWSTRS score over time, adjusting for week, age, and sex?  
 **View presentation here**: https://docs.google.com/presentation/d/11_oSlonuN7ksRJ1M47nv2QdUVYs8kBZUXGYvkx2c1Ao/edit?usp=sharing  
 
-Data obtained from http://hbiostat.org/data courtesy of the Vanderbilt University Department of Biostatistics  
+Data obtained from http://hbiostat.org/data courtesy of the Vanderbilt University Department of Biostatistics, originally from this book:
+Davis, C. S. (2003). Statistical methods for the analysis of repeated measurements (Corr. print). Springer.
+Original study was: 
+Brashear, A., Lew, M. F., Dykstra, D. D., Comella, C. L., Factor, S. A., Rodnitzky, R. L., Trosch, R., Singer, C., Brin, M. F., Murray, J. J., Wallace, J. D., Willmer–Hulme, A., & Koller, M. (1999). Safety and efficacy of NeuroBloc (Botulinum toxin type b) in type A–responsive cervical dystonia. Neurology, 53(7), 1439–1439. https://doi.org/10.1212/WNL.53.7.1439
 
 This dataset in from Table 6.9 of Statistical Methods for the Analysis of Repeated Measurements by Charles S. Davis, pp. 161-163 (Springer, 2002). These data are from a multicenter, randomized controlled trial of botulinum toxin type B (BotB) in patients with cervical dystonia from nine U.S. sites.  
 * Randomized to placebo (N=36), 5000 units of BotB (N=36), 10,000 units of BotB (N=37)
