@@ -191,7 +191,7 @@ plot(cooks, type = "h",
 abline(h = 4/(length(cooks)), col = "red", lty = 2, lwd = 2)
 ```
 
-Finally, figure 3 displays Cook's distance for all observations. The conventional threshold, 4/n, where n is the number of observations, was used to assess the influence of the observations. Several observations exceeded the threshold and were considered potentially influential and warranted further investigation. Therefore, a second GLM was fit, excluding those observations.
+Finally, Figure 3 displays Cook's distance for all observations. The conventional threshold, 4/n, where n is the number of observations, was used to assess the influence of the observations. Several observations exceeded the threshold and were considered potentially influential and warranted further investigation. Therefore, a second GLM was fit, excluding those observations.
 
 ```{r}
 #| label: influential-points
