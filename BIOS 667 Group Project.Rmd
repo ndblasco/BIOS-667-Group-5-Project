@@ -60,7 +60,15 @@ cdystonia <- cdystonia %>% dplyr::mutate(
       sex == 2 ~ "Male")
     ,
     sex = factor(sex, levels = c("Male", "Female")), # want male as reference group
-    site = factor(site, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9"))) 
+    site = factor(site, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9"))) %>%
+    group_by(site,id) %>%
+  
+    # adding chg and base so we can potentially use chg as response instead of just TWSTRS
+    # and use base as a covariate in the models LR 29NOV2025
+    dplyr::mutate(base=twstrs[week==0],
+    chg=dplyr::if_else(week != 0, twstrs-base,NA)) %>%
+  ungroup()
+    
 ```
 
 ```{r}
