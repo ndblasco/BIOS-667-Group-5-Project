@@ -212,7 +212,9 @@ kable(tidy(glm(twstrs ~ week*treat + age + sex,
                               family = gaussian())), digits=3, caption = "GLM Model Summary (Excluding Influential Observations)")
 ```
 
-Excluding influential observations resulted in modest shifts in the parameter estimates and slightly improved precision. Notably, the effect of sex remained statistically significant. The treatment effect of 10,000 U at baseline also became stronger and statistically significant while the interaction coeffecients shrunk closer to 0. Overall, excluding influential points slightly adjusted the estimates and improved precision, but the main patterns of association were consistent with the original GLM. As with the previous model, the GLM assumptions are not appropriate for longitudinal data with correlated repeated measures. The following GEE and GLMM analyses address this limitation by explicitly modeling within-subject correlation and random effects.
+Excluding influential observations resulted in modest shifts in the parameter estimates and slightly improved precision. Notably, the effect of sex remained statistically significant. The treatment effect of 10,000 U at baseline also became stronger and statistically significant while the interaction coeffecients shrunk closer to 0. The influential points likely exerted disproportionate leverage because they represented observations with either unusually high fitted values, extreme covariate patterns, or large residuals relative to the rest of the sample. After removing these points, the overall interpretation of the model remained consistent, indicating that the main associations were not driven by these atypical observations. 
+
+Overall, excluding influential points slightly adjusted the estimates and improved precision, but the main patterns of association were consistent with the original GLM. As with the previous model, the GLM assumptions are not appropriate for longitudinal data with correlated repeated measures. The following GEE and GLMM analyses address this limitation by explicitly modeling within-subject correlation and random effects.
 
 ### Generalized Estimating Equation (GEE)
 
