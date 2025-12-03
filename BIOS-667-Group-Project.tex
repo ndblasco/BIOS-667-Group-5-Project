@@ -169,14 +169,18 @@ fit using TWSTRS total score as the response variable. Prior to fitting
 models, sex and treatment group were converted to factor variables in R.
 Before fitting GEE and GLMM, a unique subject ID variable was created by
 combining site and ID. For GLM, age, sex, week, and treatment were used
-as covariates with male and placebo being the reference groups. For all
-three models, week, age, sex, treatment, and treatment \(\times\) week
+as covariates with male and placebo being the reference groups. Week was
+left as a linear predictor for ease of interpretation. For all three
+models, week, age, sex, treatment, and treatment \(\times\) week
 interaction were included in the model again with male and placebo being
 the reference groups. Both random slope and random intercept models were
 fit. ANOVA was used to compare the random slope and random intercept
 models. A Gaussian family with identity link function was used for all
-three model types. Statistical analyses were performed using R (version
-4.5.2, R Core Team, 2025).
+three model types. The Gaussian model is reasonable since the TWSTRS is
+a continuous variable. Additionally, histograms showed that TWSTRS was
+approximately normally distributed for most weeks. The GEE model was fit
+with an exchangeable correlation structure. All statistical analyses
+were performed using R (version 4.5.2, R Core Team, 2025).
 
 \subsection{Results}\label{results}
 
