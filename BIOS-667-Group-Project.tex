@@ -178,9 +178,12 @@ fit. ANOVA was used to compare the random slope and random intercept
 models. A Gaussian family with identity link function was used for all
 three model types. The Gaussian model is reasonable since the TWSTRS is
 a continuous variable. Additionally, histograms showed that TWSTRS was
-approximately normally distributed for most weeks. The GEE model was fit
-with an exchangeable correlation structure. All statistical analyses
-were performed using R (version 4.5.2, R Core Team, 2025).
+approximately normally distributed for most weeks. For GEE model, models
+with exchangeable, AR(1), and independent correlation structures were
+fit and QIC for was compared for each model. The model with the lowest
+QIC is chosen for the correlation structure, which was exchangeable in
+this case. All statistical analyses were performed using R (version
+4.5.2, R Core Team, 2025).
 
 \subsection{Results}\label{results}
 
@@ -228,7 +231,6 @@ TWSTRS total score at baseline &  &  &  &  & 0.2911\\
 \end{longtable}
 
 \pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/preliminary tables-1.pdf}}
-\pandocbounded{\includegraphics[keepaspectratio]{BIOS-667-Group-Project_files/figure-latex/preliminary tables-2.pdf}}
 
 \subsubsection{Generalized Linear Model
 (GLM)}\label{generalized-linear-model-glm}

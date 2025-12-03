@@ -17,7 +17,7 @@ csl: apa.csl
 geometry: margin=1in
 ---
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 #| label: setup
 knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
@@ -104,7 +104,7 @@ The purpose of this project is to examine the effects of botulism toxin type B (
 ## Methods
 ### *Statistical Analyses*
 
-Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable. Prior to fitting models, sex and treatment group were converted to factor variables in R. Before fitting GEE and GLMM, a unique subject ID variable was created by combining site and ID. For GLM, age, sex, week, and treatment were used as covariates with male and placebo being the reference groups. Week was left as a linear predictor for ease of interpretation. For all three models, week, age, sex, treatment, and treatment $\times$ week interaction were included in the model again with male and placebo being the reference groups. Both random slope and random intercept models were fit. ANOVA was used to compare the random slope and random intercept models. A Gaussian family with identity link function was used for all three model types. The Gaussian model is reasonable since the TWSTRS is a continuous variable. Additionally, histograms showed that TWSTRS was approximately normally distributed for most weeks. The GEE model was fit with an exchangeable correlation structure. All statistical analyses were performed using R (version 4.5.2, R Core Team, 2025).
+Number of observations, mean, median, standard deviation (SD), minimum (min) and maximum (max) were provided for age. Mean and SD were calculated for TWSTRS score at baseline. Frequencies and percentages were reported for categorical variables. GLM, GLMM, and GEE models were fit using TWSTRS total score as the response variable. Prior to fitting models, sex and treatment group were converted to factor variables in R. Before fitting GEE and GLMM, a unique subject ID variable was created by combining site and ID. For GLM, age, sex, week, and treatment were used as covariates with male and placebo being the reference groups. Week was left as a linear predictor for ease of interpretation. For all three models, week, age, sex, treatment, and treatment $\times$ week interaction were included in the model again with male and placebo being the reference groups. Both random slope and random intercept models were fit. ANOVA was used to compare the random slope and random intercept models. A Gaussian family with identity link function was used for all three model types. The Gaussian model is reasonable since the TWSTRS is a continuous variable. Additionally, histograms showed that TWSTRS was approximately normally distributed for most weeks. For GEE model, models with exchangeable, AR(1), and independent correlation structures were fit and QIC for was compared for each model. The model with the lowest QIC is chosen for the correlation structure, which was exchangeable in this case. All statistical analyses were performed using R (version 4.5.2, R Core Team, 2025).
 
 ## Results
 ### *Study Population*
@@ -123,10 +123,6 @@ tbl1<-as_kable_extra(tbl,
                table.envir = "table")
 
 tbl1
-
-ggplot(data = cdystonia, aes(x = twstrs)) +
-          geom_histogram(binwidth = 5, fill = "lightblue", color = "black") +
-          facet_wrap(~ week) + ggtitle("Histograms of TWSTRS scores by week")
 
 ggplot(data=cdystonia,aes(x=twstrs)) + geom_histogram(binwidth=5,fill="lightblue",color="black")+ggtitle("Histogram of TWSTRS score")
 ```
@@ -233,6 +229,7 @@ data_gee <- cdystonia %>% mutate(
 data_gee$treat <- relevel(data_gee$treat, ref = "Placebo")
 data_gee$sex <- relevel(data_gee$sex, ref = "Male") # want male as reference group
 
+# exchangeable model
 gee_main <- geeglm(
   twstrs ~ week * treat + age + sex,  # mean model
   id     = subj,                      # cluster = subject
@@ -240,7 +237,31 @@ gee_main <- geeglm(
   family = gaussian,                  # Gaussian working distribution (identity link)
   corstr = "exchangeable"             # working correlation structure
 )
+
+# independence model
+gee_ind <- geeglm(
+  twstrs ~ week*treat + age + sex,
+  id = subj,
+  data = data_gee,
+  family = gaussian,
+  corstr = "independence"
+)
+
+# AR(1) model
+gee_ar1 <- geeglm(
+  twstrs ~ week*treat + age + sex,
+  id = subj,
+  data = data_gee,
+  family = gaussian,
+  corstr = "ar1"
+)
 #summary(gee_main)
+
+# Compare QIC values
+#QIC(gee_main)
+#QIC(gee_exch)
+#QIC(gee_ar1)
+
 ```
 
 A GEE model with Gaussian family, identity link, and an exchangeable correlation structure. The mean model included week, treatment, treatment-by-week interaction, and baseline age and sex, with Placebo as the reference treatment group.
